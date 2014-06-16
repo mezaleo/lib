@@ -1,0 +1,33 @@
+
+.dialog_content {
+	background-color: #fafafa;
+	color:	#191919;
+	
+	-moz-box-shadow: 0px 0px 50px #191919;
+	-webkit-box-shadow: 0px 0px 50px #191919;
+	box-shadow: 0px 0px 50px #191919;
+}
+.dialog_title {
+	text-shadow: 0 -1px 0 transparent	!important;
+	background-color:	transparent;
+	background-image: none;
+	border: 0px solid #428bca;
+	border-bottom: 2px solid #428bca;
+	color: #569AB0;
+}
+.dialog_content > input[type="submit"],
+.dialog_content > input[type="button"] {
+	background-color: transparent	!important;
+	border-color: #ccc	!important;
+	border-radius: 0px	!important;
+	color: #232323	!important;
+}
+
+.dialog_close_button {
+	background-position: -697px -7px;
+	opacity: .8;
+}
+
+.mini-browser-dialog > .dialog_title > .dialog_close_button{
+	background-position: -690px -1px;
+}

@@ -1,0 +1,12 @@
+Dialog.Mensaje = new Class( {
+	Extends: Dialog,
+	Implements : Options,
+	initialize : function(text) {
+		var options = {text:text};
+		options.text = text;
+		options.title = 'Mensaje';
+		this.parent(options);
+		this.content.addClass('sccss');
+		
+	}
+});

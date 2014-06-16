@@ -1,0 +1,115 @@
+.mini-browser-dialog {
+	width: 80%	!important;
+	min-width: 200px;
+	top: 25%	!important;
+	left: 10%	!important;
+}
+
+.dialog_content {
+	background-color: white;
+	position: fixed;
+	width: 30%;
+	min-width: 250px;
+	top: 20%;
+	left: 35%;
+	-moz-box-shadow: 0px 0px 30px #555555	!important;
+	-webkit-box-shadow: 0px 0px 30px #555555	!important;
+	box-shadow: 0px 0px 30px #555555	!important;
+	padding-bottom: 5px;
+	z-index: 10000;
+	opacity: 0;
+}
+
+.mini-browser-dialog > .dialog_title{
+	font-size: 25px	!important;
+}
+
+.dialog_title {
+	text-shadow: 0 -1px 0 #3071a9;
+	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
+	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);
+	background-repeat: repeat-x;
+	color: #ffffff;
+	background-color: #428bca;
+	font-weight: normal;
+	border: 1px solid #428bca;
+	padding: 10px;
+	font-size: 17px;
+}
+.mini-browser-dialog > .dialog_text_content{
+	font-size: 25px	!important;
+}
+
+
+.dialog_text_content {
+	margin: 10px;
+	margin-left: 15px;
+/*	text-align: justify;*/
+	font-size: 14px;
+}
+.dialog_text_content:first-letter {
+/*	margin-left: 10px;	SANGRIA*/
+}
+.dialog_content>input[type="submit"],
+.dialog_content>input[type="button"] {
+	float: right;
+}
+.mini-browser-dialog > input[type="submit"],
+.mini-browser-dialog > input[type="button"] {
+	font-size: 20px	!important;
+}
+
+.btn_aceptar,input[value *="Aceptar"] {
+	background-color: #3276b1;
+	border-color: #285e8e;
+	color: white !important;
+	cursor: pointer !important;
+	border-color: #285e8e;
+}
+
+.mini-browser-dialog > .dialog_title > .dialog_close_button{
+	height:	30px	!important;
+	width:	30px	!important;
+/*	background-size: 1500px 290px;*/
+/*	background-position: -1391px -132px	!important;*/
+	background-position: -690px -60px;
+}
+
+.dialog_close_button {
+	height: 16px;
+	width: 16px;
+	float: right;
+	background-image: url(dialog/sprite.png);
+	background-position: -697px -67px;
+	cursor: pointer;
+	opacity: 1;
+}
+
+.dialog_close_button:hover {
+	opacity: 1;
+}
+/*.err {
+	background-color: #f64b2f	!important;
+	color:	 #fafafa	!important;
+}
+.err .dialog_title{
+	background-color: transparent !important;
+	border-bottom: 1px solid #ccc;
+	color: white	!important;
+}
+.err .dialog_close_button{
+	background-position: -697px -67px;
+}
+.sccss {
+	background-color: #7EB62E	!important;
+	color:	 #fafafa	!important;
+}
+.sccss .dialog_title{
+	background-color: transparent !important;
+	border-bottom: 1px solid #ccc;
+	color: white	!important;
+}
+.sccss .dialog_close_button{
+}*/
+	background-position: -697px -67px;
+

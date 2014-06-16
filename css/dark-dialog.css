@@ -1,0 +1,21 @@
+
+.dialog_content {
+	background-color: #191919;
+	color:	white;
+	
+	-moz-box-shadow: 0px 0px 50px #191919;
+	-webkit-box-shadow: 0px 0px 50px #191919;
+	box-shadow: 0px 0px 50px #191919;
+}
+.dialog_title {
+	background-color:	transparent;
+	background-image: none;
+	border: 0px solid #428bca;
+	border-bottom: 2px solid #428bca;
+	color: white;
+}
+.dialog_content > input[type="button"] {
+	background-color: transparent	!important;
+	border-color: #232323	!important;
+	border-radius: 0px	!important;
+}

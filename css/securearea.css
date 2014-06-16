@@ -1,0 +1,26 @@
+body {
+	/*background-image: url(images/banner_home.png);*/
+	background-attachment: fixed;
+	
+	background-repeat: no-repeat;
+	background-position: top;
+}
+
+input[type=text],input[type=password] {
+	background-color:	#AF4D4D;
+	border: 1px solid #750000 !important;
+	color:	#750000;
+	font-size: 15px;
+	padding: 3px 5px;
+}
+
+input[type=text]:focus,input[type=password]:focus {
+	border: 1px solid #EFE700 !important;
+	color:	#EFE700;
+	font-weight: bold;
+
+	-ms-transition:   .3s;
+    -webkit-transition:  .3s;
+    -moz-transition:  .3s;
+    -o-transition: .3s;
+}

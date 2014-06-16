@@ -1,0 +1,26 @@
+#settings {
+	position: fixed;
+	background-color: #444;
+	z-index: 3000;
+	position: fixed;
+	width: 200px;
+	right: -200px;
+	height: 75%;
+	padding-top:5%;
+	top: 15%;
+	
+	background-color: #FFFDDD;
+	border: 2px dashed #FADA78;
+	
+}
+#settings > div {
+	color:	#847642;
+	font-size: 14px;
+	padding: 5px 10px;
+}
+
+#settings::-webkit-scrollbar-thumb {
+	background-color: #847642	!important;
+	-webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.10), inset 0 -1px 0
+		rgba(0, 0, 0, 0.07);
+}

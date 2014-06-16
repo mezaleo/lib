@@ -1,0 +1,271 @@
+.mini-browser-menu { /*	border:2px solid red	!important;*/
+	height: 50px !important;
+}
+
+#menu_head,.menu_head {
+	border: 1px solid #e7e7e7;
+	/*	border-radius: 4px;*/
+	position: fixed;
+	z-index: 8000 !important;
+	background: #f7f7f7;
+	background: -moz-linear-gradient(top, #f7f7f7 0%, #f2f2f2 99%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f7f7f7),
+		color-stop(99%, #f2f2f2) );
+	background: -webkit-linear-gradient(top, #f7f7f7 0%, #f2f2f2 99%);
+	background: -o-linear-gradient(top, #f7f7f7 0%, #f2f2f2 99%);
+	background: -ms-linear-gradient(top, #f7f7f7 0%, #f2f2f2 99%);
+	background: linear-gradient(to bottom, #f7f7f7 0%, #f2f2f2 99%);
+	top: 0px;
+	left: 0px;
+	width: 80%;
+	height: 50px !important;
+	padding: 0% 10%;
+	text-align: right;
+	/* IE6-8 */
+	-moz-box-shadow: 0px 0px 10px #191919;
+	-webkit-box-shadow: 0px 0px 10px #191919;
+	box-shadow: 0px 0px 10px #191919;
+}
+
+/*	Colores para el Menu
+	dark-blue || dark-green
+*/ 
+.dark-blue {
+	border-color: #191919	!important;
+	background-color: #383838;
+	background-image: url(menu/bg.png);
+}
+/*.dark-blue > .menu-title {*/
+/*	color: #94C7E0	!important;*/
+/*}*/
+.dark-blue > * {
+	color: #fafafa	!important;
+	border-color: #36383A	!important;
+	text-shadow:	1px 1px 5px #000;
+	text-decoration: none	!important;
+}
+.dark-blue > *:hover {
+	background-color: #ca0b53	!important;
+}
+.dark-blue > .menu-more {
+	background-position: 34px -57px;
+}
+.dark-blue + .menu-sub{
+	border-color: #191919;
+}
+.dark-blue + .menu-sub > *{
+	color:	white;
+	text-decoration: none;
+}
+.dark-blue + .menu-sub >*:hover {
+	background-image: none	!important;
+	background-color: #016982	!important;
+}
+.dark-blue > .menu-compact {
+	background-position: -85px -55px	!important;
+}
+
+/*	dark-green	*/
+
+.dark-green {
+	border-color: #616161	!important;
+	background-color: #919394;
+	background-image: url(menu/bg.png);
+}
+.dark-green > * {
+	color: #fafafa	!important;
+	border-color: #616161	!important;
+	text-shadow:	1px 1px 5px #000;
+	text-decoration: none	!important;
+}
+.dark-green > *:hover {
+	background-color: rgba(0,148,68,0.4)	!important;
+}
+.dark-green > .menu-more {
+	background-position: 34px -57px;
+}
+.dark-green + .menu-sub > *{
+	color:	white;
+	text-decoration: none;
+}
+.dark-green + .menu-sub >*:hover {
+	background-image: none	!important;
+	background-color: #47a447	!important;
+}
+.dark-green > .menu-compact {
+	background-position: -85px -55px	!important;
+}
+
+/*	Fin colores del Menu*/
+#menu_head>*,.menu_head>* {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	height: 20px;
+	padding: 15px 10px;
+	cursor: pointer;
+	color: #777777;
+	text-decoration: none	!important;
+	width: auto !important;
+	display: inline-table;
+	font-size: 14px;
+	border-left: 1px solid #ccc;
+}
+
+#menu_head>*.al-l,.menu_head>*.al-l {
+	float: left;
+}
+
+#menu_head>*:hover,.menu_head>*:hover {
+	background-color: #eeeeee;
+}
+
+.menu-logo {
+	background-size: 100% 100%	!important;
+	background-color:	transparent;
+	float: left;
+	float: left;
+	padding: 0px;
+	height: 80px;
+	left: 0%	!important;
+	width: 150px	!important;
+	border:	0px solid #191919	!important;
+	position:	relative;
+	display:	none;
+	
+		
+	-moz-box-shadow: 0px 0px 10px	transparent	!important;
+	-webkit-box-shadow: 0px 0px 10px transparent	!important;
+	box-shadow: 0px 0px 10px transparent	!important;
+	
+}
+.menu-logo:hover {
+	background-color:	transparent	!important;
+}
+
+.menu-title {
+	background-size: 100% 100%	!important;
+	font-family: 'Tahoma', sans-serif;
+	font-size: 20px;
+	font-weight: bold;
+	float: left;
+	margin-left: -13%;
+	padding-top: 12px	!important;
+	float: left;
+	height: 100%;
+	
+	-moz-box-shadow: 0px 0px 10px	transparent	!important;
+	-webkit-box-shadow: 0px 0px 10px transparent	!important;
+	box-shadow: 0px 0px 10px transparent	!important;
+}
+
+.menu-title:hover {
+	background-color: transparent	!important;
+}
+
+.menu-compact {
+	float: right;
+	margin-right: -11%;
+	margin-top: 8px;
+	/*	background-image: url(dialog/sprite.png);*/
+	background-position: -90px 0px;
+	display: none;
+}
+
+.mini-browser-menu>* {
+	
+}
+
+.mini-browser-menu>.menu-compact {
+	float: right;
+/*	border-left: 1px solid #ccc !important;*/
+	margin-right: -12%;
+	margin-top: 5px !important;
+	/*	background-image: url(dialog/sprite.png);*/
+/*	background-image: url(menu/mobile_menu.png) !important;*/
+	background-image: url(dialog/sprite.png);
+	background-position: -84px 5px;
+	background-repeat: no-repeat !important;
+/*	background-position: center;*/
+/*	background-size: 30px 30px !important;*/
+	display: none;
+	width: 40px !important;
+	height: 38px !important;
+	padding: 0px !important;
+}
+
+.menu-submenu-content {
+	border: 1px solid #ccc;
+}
+
+.menu-sub {
+	background-color: #323C41;
+	color: white;
+	border: 1px solid #ccc;
+	width: 200px;
+	max-height: 300px;
+	position: fixed;
+	right: 0px;
+	top: -300px;
+	max-height: 300px;
+	/*	display: none;*/
+	transition: 0.3s ease;
+	-ms-transition: 0.3s ease;
+	-moz-transition: 0.3s ease;
+	-webkit-transition: 0.3s ease;
+	-o-transition: 0.3s ease;
+	-ms-transition: 0.3s ease;
+	z-index: 7900;
+}
+
+.menu-sub>* {
+	padding: 5%;
+	width: 90% !important;
+	display: block;
+}
+
+.menu-mobile {
+	/*	top: 50px;*/
+	width: 100%;
+	padding: 0px;
+	height: auto;
+}
+
+.menu-mobile>* {
+	font-size: 18px;
+	padding: 10px 5% 1% 5% !important;
+	/*	padding: 10px 0px 10px 20px;*/
+}
+
+.menu-mobile>*:last-child {
+	padding-top: 10px !important;
+	padding-bottom: 10px !important;
+}
+
+.menu-sub-open {
+	top: 50px !important;
+}
+
+.menu-sub>*:hover {
+	background-color: #357ebd;
+	background-image: -webkit-linear-gradient(top, #428bca 0, #357ebd 100%);
+	background-image: linear-gradient(to bottom, #428bca 0, #357ebd 100%);
+	background-repeat: repeat-x;
+	color: white;
+	cursor: pointer;
+}
+
+.menu-more {
+	float: right;
+	background-image: url(dialog/sprite.png);
+	background-position: 34px 3px;
+	margin-right: -13%;
+	margin-top: 5px;
+	display: none;
+	height: 35px !important;
+	width: 40px !important;
+	padding: 0px;
+	border: 0px solid red !important;
+}
+
+.menu-more:hover {
+/*	background-color: transparent !important;*/
+}
