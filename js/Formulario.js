@@ -62,6 +62,9 @@ var Formulario = new Class( {
 
 					var i = new Element('input[type="' + item.type + '"]',
 							props).injectInside(F.form);
+					if(item.events != null){
+						i.addEvents(item.events);
+					}
 
 					if (item.value != null) {
 						i.set('value',item.value);
@@ -128,6 +131,9 @@ var Formulario = new Class( {
 				} else if (item.type == 'textarea') {	
 					var i = new Element('textarea',
 							props).injectInside(F.form);
+					if(item.events != null){
+						i.addEvents(item.events);
+					}
 
 					if (item.size != null && item.size != '') {
 						i.addClass(item.size);
@@ -158,6 +164,9 @@ var Formulario = new Class( {
 					//new Element('br').injectInside(F.form);
 				} else if(item.type == 'date'){
 					var date = new Element('input[type="text"]',props).injectInside(F.form);
+					if(item.events != null){
+						date.addEvents(item.events);
+					}
 					
 					if (item.required != null && item.required == true) {
 						date.addClass('required');
@@ -183,6 +192,9 @@ var Formulario = new Class( {
 					});
 				}else if(item.type == 'datalist') {
 					var i = new Element('input[autocomplete="off"][list="'+item.name+'"][type="text"][name="'+item.name+'"][placeholder="'+item.title+'"]').injectInside(F.form);
+					if(item.events != null){
+						i.addEvents(item.events);
+					}
 					var datalist = new Element('datalist#'+item.name).injectInside(F.form);
 					item.values.each(function(v){
 						var opt = new Element('option',{
@@ -214,18 +226,17 @@ var Formulario = new Class( {
 					});
 				}else if(item.type == 'combo') {
 					var i = new Element('select[name="'+item.name+'"][placeholder="'+item.title+'"]').injectInside(F.form);
+					if(item.events != null){
+						i.addEvents(item.events);
+					}
 					//var datalist = new Element('datalist#'+item.name).injectInside(F.form);
 					new Element('option',{
 						'value':'',
 						'html':item.title
 					}).injectInside(i);
-					console.log(item.values);
-					console.log((item.values)instanceof(Array));
 					if(typeof(item.values) == 'object' && (item.values)instanceof(Array) == false){
 						item.values.source.each(function(e){
 							var v = "";
-//							console.log("---");
-//							console.log((item.values.textField).test(" "));
 							if(item.values.textField.test(" ")){
 								var vls = (item.values.textField).split(" ");
 								
@@ -362,7 +373,7 @@ var Formulario = new Class( {
 //		if(el.get('list') != null){
 //			return $(el.get('list'))
 //		}else{
-			return el;
+		return el;
 //		}
 		
 	},

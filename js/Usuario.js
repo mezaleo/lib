@@ -11,7 +11,8 @@ var Usuario = new Class( {
 }).extend({
 	controllerUrl:'controller/usuario.php',
 	login:function(usuario){
-		return (new RequestAjax(Usuario.controllerUrl,{accion:'login'}));
+		usuario.accion='login';
+		return (new RequestAjax(Usuario.controllerUrl,usuario));
 	},
 	getCurrentIdUsuario:function(usuario){
 		return (new RequestAjax(Usuario.controllerUrl,{accion:'get_id_usuario'}));

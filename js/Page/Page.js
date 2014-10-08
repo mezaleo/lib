@@ -124,6 +124,6 @@ var Page = new Class( {
 	},
 	closeAll: function(){
         //console.log('closeAll Method was called.');
-		$$('.page_content').hide();
+		//$$('.page_content').hide();
 	}
 });

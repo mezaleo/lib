@@ -1,8 +1,4 @@
 .tabla>div.tcomentario {
-	/*div.comentario*/
-	 /*	padding: 5px;*/ /*	color: #444;*/
-	/*	background-color: #FFFDDD;*/ /*	border: 2px dashed #FADA78;*/
-	/*	margin-bottom: 10px;*/
 	background-image: -webkit-linear-gradient(top, #d9edf7 0, #b9def0 100%);
 	background-image: linear-gradient(to bottom, #d9edf7 0, #b9def0 100%);
 	background-repeat: repeat-x;
@@ -18,12 +14,13 @@
 }
 .tabla {
 	background-color:  #fafafa;
-	width:60%;
-	margin: 0 auto;	
+	width:	99%	!important;
+	margin-top: 20px	!important;
 	padding-bottom: 20px;
 	border: 1px solid #f3f3f3;
 }
 .tabla>table {
+	width:100%;
 	margin: 0 auto;
 	border-collapse: collapse;
 }
@@ -119,4 +116,25 @@
 	padding: 2px 10px;
 	margin-top: 5px;
 	margin-left: 5px;
+}
+.tabla>table>tbody>tr>td {
+	text-align: left	!important;
+}
+.tabla>table>tbody>tr>td>div {
+	cursor: pointer;
+	display: inline-block;
+	text-align:left	!important;
+	color: #191919;
+	font-size: 15px;
+	padding: 2px 10px;
+	margin-top: 5px;
+	margin-left: 5px;
+	left: 0px;
+	width: auto	!important;
+}
+.tabla>table>tbody>tr>td>div:first-child {
+	font-size: 20px;
+	width: auto	!important;
+	display:block;
+	font-weight: bold;
 }
