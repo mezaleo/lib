@@ -14,9 +14,9 @@ Spinner = new Class({
 		new Element('div').injectInside(this.spinner);
 	},
 	show : function(){
-		this.spinner.show();
+		$(this.spinner).show();
 	},
 	hide : function(){
-		this.spinner.hide();
+		$(this.spinner).hide();
 	}
 });

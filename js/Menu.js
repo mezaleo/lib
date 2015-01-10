@@ -3,6 +3,7 @@ var Menu = new Class( {
 	content : null,
 	mobile:false,
 	currentOptions:0,
+	titleMaxLength:30,
 	styles:{
 		blue:'dark-blue',
 		green:'dark-green'
@@ -11,14 +12,12 @@ var Menu = new Class( {
 		title:'Nombre Proyecto',
 		logo:'none',
 		optionsLimit:3,
-		minWidth:600
+		minWidth:300
 	},
 	initialize : function(options) {
 		this.setOptions(options);
 	
 		var menu = this;
-		console.log('Puedes ocupar los metodos setStyle("green | blue") para cambiar la apariencia del Menu.');
-		console.log('Para asignar un titulo ocupa el Metodo setTitle("texto").');
 		
 		this.content = new Element('div.menu_head',{
 			events:{
@@ -130,6 +129,10 @@ var Menu = new Class( {
 		
 	},
 	setTitle:function(text){
+		console.log(text);
+//		if(text.length > this.titleMaxLength){
+//			text = text.substring(0,this.titleMaxLength);
+//		}
 		this.title.set('html',text);
 	},
 	add:function(text,props){
@@ -186,6 +189,9 @@ var Menu = new Class( {
 		return this.mobile;
 	},
 	setTitle : function(texto){
+		if(texto.length > this.titleMaxLength){
+			texto = texto.substring(0,this.titleMaxLength);
+		}
 		this.title.set('text',texto);
 	},
 	setLogo: function(logo){

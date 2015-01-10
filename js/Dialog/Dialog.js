@@ -4,7 +4,7 @@ var Dialog = new Class( {
 		minWidth: 600,
 		title:'Mensaje',
 		text:'Dialog: No se ha definido mensaje.',
-		autoClose:true,
+		autoClose:false,
 		autoCloseDelay:3000,
 		onOk:function(){
 	
@@ -23,7 +23,6 @@ var Dialog = new Class( {
 		}
 
 		var Dlog = this;
-		this.bg = new Bg();
 		this.content = new Element('div.dialog_content').injectInside(document.body);
 		
 		
@@ -58,15 +57,13 @@ var Dialog = new Class( {
 	},
 	close: function(){
 		this.content.destroy();
-		this.bg.close();
 	},
 	open: function(){
 		var me = this;
-		this.bg.open();
 		
-		//this.content.set('morph',{duration:200, transition: 'linear'});
+		this.content.set('morph',{duration:200, transition: 'linear'});
 		this.content.morph({
-			top:'170',
+//			dtop:'170',
 			opacity: 1
 		});
 		

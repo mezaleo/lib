@@ -24,8 +24,12 @@
 	margin: 0 auto;
 	border-collapse: collapse;
 }
+
 .tabla>table>thead>tr{
 	display:table-row;
+}
+.tabla>table>thead>tr>th[text="Activo"] {
+	width: 50px	!important;
 }
 .tabla>table>thead>tr>th { /*	background-color: #EFF4F7;*/
 	padding: 10px;
@@ -43,31 +47,118 @@
 	text-transform: capitalize;
 	border: 1px solid #428bca;
 }
-/*.tabla>table>thead>tr>th:first-child {*/
-/*	border-top-left-radius: 7px	!important;*/
-/*}*/
-/*.tabla>table>thead>tr>th:last-child {*/
-/*	text-align: right;*/
-/*}*/
+.tabla>table>thead>tr>th:last-child {
+	text-align:	right;
+}
+.tabla>table>thead>tr>th:last-child >* {
+	float:	right;
+}
 .tabla>table>tbody>tr{
 	display:none;
 }
+.tabla>table>tbody>div{
+	background-color: white;
+	color:	#555555;
+	padding: 5px 7px;
+	cursor: default;
+	font-size: 13px;
+	border-bottom: 1px solid #ccc;
+	text-transform: uppercase	!important;
+	
+	transition: .2s;
+	-ms-transition: .2s;
+	-webkit-transition: .2s;
+	-moz-transition: .2s;
+	-o-transition: .2s;
+}
+.tabla>table>tbody>div>div{
+	width: auto	!important;
+	display:inline-block;
+	padding: 3px;
+	margin: 2px;
+	font-size: 12px;
+}
+.tabla>table>tbody>div>div:nth-child(1),
+.tabla>table>tbody>div>div:nth-child(2){
+	font-size: 14px	!important;
+	font-weight: bold	!important;
+}
+.tabla>table>tbody>div>div:nth-child(2){
+	margin-right: 30px;
+}
+.tabla>table>tbody>div>div:nth-child(3){
+	float:right;
+}
+/*CRITICO*/
+.tabla>table>tbody>tr.critico>td{
+	background-color: #FFEDED;
+	color: #6E0000;
+}
+.tabla>table>tbody>tr.critico:hover>td{
+	background-color: #FFDFDF;
+}
+.tabla>table>tbody>tr.critico.checked>td{
+	background-color: #FFC8C8;
+}
+.tabla>table>tbody>tr.critico.checked:hover>td{
+	background-color: #FFD1D1;
+}
+.tabla>table>tbody>tr.critico.checked>td:first-child{
+	border-left: 8px solid #cc0000 !important;
+}
+.tabla>table>tbody>tr.critico.checked:hover>td:first-child{
+	border-left: 8px solid #cc0000 !important;
+}
+/*DISABLED*/
+.tabla>table>tbody>tr.disabled>td{
+	background-color: #EEEEEE;
+	opacity: 0.5;
+}
+.tabla>table>tbody>tr.disabled:hover>td{
+	background-color: #EEEEEE;
+}
+.tabla>table>tbody>tr.disabled.checked>td{
+	background-color: #EEEEEE;
+}
+.tabla>table>tbody>tr.disabled.checked:hover>td{
+	background-color: #EEEEEE;
+}
+.tabla>table>tbody>tr.disabled.checked>td:first-child{
+	border-left: 8px solid #191919 !important;
+}
+.tabla>table>tbody>tr.disabled.checked:hover>td:first-child{
+	border-left: 8px solid #191919	!important;
+}
+.tabla>table>tbody>tr.checked>td{
+	background-color: #ECDEFF;
+}
+.tabla>table>tbody>tr.checked:hover>td{
+	background-color: #E4D2FD;
+}
+.tabla>table>tbody>tr.checked>td:first-child{
+	border-left: 8px solid blue;
+}
+.tabla>table>tbody>tr.checked:hover>td:first-child{
+	border-left: 8px solid blue;
+}
 .tabla>table>tbody>tr>td.checkbox,
 .tabla>table>thead>tr>th.checkbox {
-	width: auto;
+	width: 10px;
 }
 .tabla>table>tbody>tr>td {
 	background-color: white;
 	color:	#555555;
 	padding: 5px 7px;
 	cursor: default;
-	width: 150px;
+	font-size: 13px;
+/*	width: 150px;*/
 	border-bottom: 1px solid #ccc;
-/*	transition: .3s;*/
-/*	-ms-transition: .3s;*/
-/*	-webkit-transition: .3s;*/
-/*	-moz-transition: .3s;*/
-/*	-o-transition: .3s;*/
+	text-transform: uppercase	!important;
+	transition: .2s;
+	-ms-transition: .2s;
+	-webkit-transition: .2s;
+	-moz-transition: .2s;
+	-o-transition: .2s;
 }
 
 /*.tabla>table>tbody>tr>td > *{
@@ -80,7 +171,9 @@
 	text-align: right;
 	border-right: 1px solid #ccc;
 }
-
+.tabla>table>tbody>tr>td:last-child >* {
+	float:	right	!important;
+}
 .tabla>table>tbody>tr:hover>td {
 	background-color: #f3f3f3;
 }
@@ -92,7 +185,22 @@
 .tabla>table>tbody>tr:hover>td:last-child {
 	border-right: 1px solid #c6d8e4;
 }
-
+.tabla>table>tbody>tr>td>button.rowButton {
+	font-family: 'Arial';
+	padding: 5px 7px;
+	display: inline-block;
+	font-size: 12px;
+	cursor: pointer;
+	margin-right: 2px;
+	background-color: #428bca;
+	color: white;
+	border: 1px solid #357ebd;
+	border-radius: 3px;
+	font-weight: bold;
+}
+.tabla>table>tbody>tr>td>button.rowButton:hover {
+	background-color: #25709C;
+}
 .tabla>table>tbody>tr.hide {
 	display: none;
 	transition: .6s;
@@ -117,24 +225,24 @@
 	margin-top: 5px;
 	margin-left: 5px;
 }
-.tabla>table>tbody>tr>td {
-	text-align: left	!important;
-}
-.tabla>table>tbody>tr>td>div {
-	cursor: pointer;
-	display: inline-block;
-	text-align:left	!important;
-	color: #191919;
-	font-size: 15px;
-	padding: 2px 10px;
-	margin-top: 5px;
-	margin-left: 5px;
-	left: 0px;
-	width: auto	!important;
-}
-.tabla>table>tbody>tr>td>div:first-child {
-	font-size: 20px;
-	width: auto	!important;
-	display:block;
-	font-weight: bold;
-}
+/*.tabla>table>tbody>tr>td {*/
+/*	text-align: left	!important;*/
+/*}*/
+/*.tabla>table>tbody>tr>td>div {*/
+/*	cursor: pointer;*/
+/*	display: inline-block;*/
+/*	text-align:left	!important;*/
+/*	color: #191919;*/
+/*	font-size: 15px;*/
+/*	padding: 2px 10px;*/
+/*	margin-top: 5px;*/
+/*	margin-left: 5px;*/
+/*	left: 0px;*/
+/*	width: auto	!important;*/
+/*}*/
+/*.tabla>table>tbody>tr>td>div:first-child {*/
+/*	font-size: 20px;*/
+/*	width: auto	!important;*/
+/*	display:block;*/
+/*	font-weight: bold;*/
+/*}*/

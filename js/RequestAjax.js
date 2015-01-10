@@ -5,9 +5,6 @@ var RequestAjax = new Class( {
 			estado:500,
 			mensaje:'No se pudo realizar el Request a ' + url
 		};
-		//console.clear();
-//		console.log('Esto se envia: ');
-//		console.log(object);
 		var request = new Request.JSON( {
 			async : false,
 			url : url,

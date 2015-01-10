@@ -5,7 +5,7 @@
 	Date:	2014						*
 *****************************************/
 
-Content = new Class({
+var Content = new Class({
 	Implements : Options,
 	content: null,
 	spinner:null,
@@ -21,6 +21,7 @@ Content = new Class({
 	resumeTitleLength:10,
 	mnmiceContentClass:'mnmice-content',
 	messageLabelClass:'message-label',
+	messageLabelErrorClass:'error-message',
 	tabContentClass:'tab-content',
 	comboValuesContentClass:'combo-values-content',
 	draggableClass:'draggable',
@@ -38,6 +39,8 @@ Content = new Class({
 	topPanelButtonContentClass:'top-panel-btn-content',
 	topPanelBodyClass:'top-panel-body',
 	minimalBorderDistance:20,//px
+	/*new properties for resize*/
+	mobileClass:'c-mini',
 	options:{
 		contentElement:null,
 		open:true,
@@ -45,11 +48,17 @@ Content = new Class({
 		title:'<Sin Titulo>',
 		top:10,
 		width:20,
+		height:70,
 		align:'center',
 		draggable:true,
-		minimizable:true,
+		minimizable:false,
 		destroyable:false,
-		closeable:true
+		closeable:true,
+		confirmCloseText:'Seguro desea cerrar?',
+		confirmClose:false,
+		onClose:null,
+		/*new*/
+		minWidth:900
 	},
 	initialize : function(opt) {
 		var me = this;
@@ -59,31 +68,22 @@ Content = new Class({
 		if(Content.mnmiceContent == null){
 			Content.mnmiceContent = new Element('div.'+this.mnmiceContentClass).injectInside(this.options.contentElement);
 		}
-		/*if(Content.topContent == null){
-			Content.topContent = new Element('div#'+this.topContentId).injectInside(this.options.contentElement);
-		}
-		if(Content.bottomContent == null){
-			Content.bottomContent = new Element('div#'+this.bottomContentId).injectInside(this.options.contentElement);
-		}
-		if(Content.leftContent == null){
-			Content.leftContent = new Element('div#'+this.leftContentId).injectInside(this.options.contentElement);
-		}
-		if(Content.rightContent == null){
-			Content.rightContent = new Element('div#'+this.rightContentId).injectInside(this.options.contentElement);
-		}*/
 		
 		this.setOptions(opt);
-		this.content = new Element('div.'+this.contentClass,{
-			events:{
-				click:function(){
-					$$('.' + me.contentClass).removeClass(me.focusClass);
-					this.addClass(me.focusClass);
-				}
-			}
-		}).injectInside(this.options.contentElement).setStyle('top',me.options.top+'%');
+		this.content = new Element('div.'+this.contentClass).injectInside(this.options.contentElement).setStyle('top',me.options.top+'%');
 		if(this.options.draggable){
 			this.content.addClass(this.draggableClass);
 		}
+		
+		//width listener to know if is mobile or not
+		if(isPhoneBrowser() || window.getWidth() <= this.options.minWidth){
+			this.content.addClass(this.mobileClass);
+		}
+		
+		window.addEvent('resize',function(){
+			me.onResize();
+		});
+		
 		
 		this.comboValuesContent = new Element('div.'+this.comboValuesContentClass).injectInside(this.content);
 		new Element('div[html="Seleccione un elemento"]').injectInside(this.comboValuesContent);
@@ -101,6 +101,11 @@ Content = new Class({
 		
 		//setting width and align
 		this.content.setStyle('width',this.options.width+'%');
+		if(this.options.height == 'auto'){
+			this.content.setStyle('height',this.options.height);	
+		}else{
+			this.content.setStyle('height',this.options.height+'%');
+		}
 		if(this.options.align == 'center'){
 			this.content.setStyle('left',((100 - this.options.width)/2)+'%');
 		}else if(this.options.align == 'right'){
@@ -123,6 +128,7 @@ Content = new Class({
 								},
 								onDrag: function(element, droppable){
 									element.addClass(me.draggingClass);
+									me.focus();
 								},
 								onSnap: function(element, droppable){
 									drag.detach();
@@ -150,7 +156,21 @@ Content = new Class({
 			this.closeBtn = new Element('div[text="x"].'+this.closeBtnClass,{
 				events:{
 					click:function(){
-						me.close();
+						if(me.options.confirmClose){
+							new Dialog.Confirm(me.options.confirmCloseText,{
+								onOk:function(){
+									if(me.options.onClose != null){
+										me.options.onClose();
+									}
+									me.close();
+								}
+							});
+						}else{
+							if(me.options.onClose != null){
+								me.options.onClose();
+							}
+							me.close();
+						}
 					}
 				}
 			}).injectInside(this.closeBar);
@@ -177,7 +197,13 @@ Content = new Class({
 		//this.tabContent = new Element('div.'+this.tabContentClass).injectInside(this.content);
 
 		//Title
-		this.title = new Element('div.'+this.titleClass).injectInside(this.content);
+		this.title = new Element('div.'+this.titleClass,{
+			events:{
+				click:function(){
+					me.focus();
+				}
+			}
+		}).injectInside(this.content);
 		if(this.options.title != null){
 			this.setTitle(this.options.title);
 		}
@@ -185,7 +211,6 @@ Content = new Class({
 		this.topPanelBody= new Element('div.'+this.topPanelBodyClass).injectInside(this.topPanel);
 		this.topPanelButtonContent = new Element('div.'+this.topPanelButtonContentClass).injectInside(this.topPanel);
 		this.messageLabel = new Element('div.'+this.messageLabelClass).injectInside(this.content);
-		//this.showMessage('Hola Mundo...');
 		
 		this.hide();
 		if(this.options.open == true){
@@ -207,15 +232,29 @@ Content = new Class({
 		var me = this;
 		if(el != null){		
 			props.values.each(function(v){
-				new Element('div[html="'+v[props.valueName]+'"]',{
+				
+				var valor = "";
+				if(props.valueName.test(" ")){
+					var vls = (props.valueName).split(" ");
+					if(vls.length > 0){
+						vls.each(function(a){
+							valor = valor + " " + v[a];
+						});
+					}
+				}else{
+					valor = v[props.valueName];
+				}
+				
+				
+				
+				new Element('div[html="'+valor+'"]',{
 					events:{
 						click:function(){
 							el.set('id',v[props.indexName]);
-							el.set('value',v[props.valueName]);
+							el.set('value',valor);
 							me.hideComboValues();
 							this.addClass('selected');
 							if(props.onChange!=null){
-								console.log('change');
 								props.onChange(me);
 							}
 						}
@@ -235,6 +274,11 @@ Content = new Class({
 	},
 	showMessage : function(message){
 		this.messageLabel.set('html',message).show();
+		this.messageLabel.removeClass(this.messageLabelErrorClass);
+	},
+	showErrorMessage : function(message){
+		this.showMessage(message);
+		this.messageLabel.addClass(this.messageLabelErrorClass);
 	},
 	hideBody : function(){
 		this.fields.addClass('hidden');
@@ -245,7 +289,7 @@ Content = new Class({
 		this.buttons.removeClass('hidden');
 	},
 	hideMessage : function(message){
-		this.messageLabel.hide();
+		$(this.messageLabel).hide();
 	},
 	setTitle : function(text){
 		this.title.set('html',text);
@@ -272,19 +316,21 @@ Content = new Class({
 		this.spinner.show();
 	},
 	hideSpinner : function(){
-		this.content.removeClass('loading');
+		$(this.content).removeClass('loading');
 		this.spinner.hide();
 	},
 	open: function(){
-		this.content.removeClass(this.hiddenClass);
-		this.content.addClass(this.openedClass);
+		this.content.show();
 	},
 	show:function(){
 		this.open();
+		this.focus();
+		return this;
 	},
 	hide: function(){
-		this.content.removeClass(this.openedClass);
-		this.content.addClass(this.hiddenClass);
+//		this.content.removeClass(this.openedClass);
+//		this.content.addClass(this.hiddenClass);
+		this.content.hide();
 	},
 	close: function(){
 		if(this.options.destroyable){
@@ -295,15 +341,53 @@ Content = new Class({
 	},
 	addTopPanelButton:function(type,fn){
 		this.topPanel.show();
-		var b = new Element('div.panel-btn').injectInside(this.topPanelButtonContent).addClass(type).addEvent('click',fn);
-		if(type == 'add'){
-			b.set('html','+');
+		if(type == 'add' || type == 'reload' || type == 'delete'){
+			var title = null;
+			if(type == 'add'){
+				title = 'Ingresa nuevo registro';
+			}else if(type == 'reload'){
+				title = 'Actualizar lista';
+			}else if(type == 'delete'){
+					title = 'Eliminar registro';	
+			}
+			var b = new Element('div.panel-btn[title="'+title+'"]').injectInside(this.topPanelButtonContent).addClass(type).addEvent('click',fn);
+			if(type == 'add'){
+				b.set('html','+');
+			}
+		}else{
+			var b = new Element('button.panel-btn[html="'+type+'"]').injectInside(this.topPanelButtonContent).addEvent('click',fn);
+		}
+	},
+	focus:function(){
+		var me = this;
+		$$('.' + me.contentClass).removeClass(me.focusClass);
+		this.content.addClass(me.focusClass);
+	},
+	blur:function(){
+		var me = this;
+		(function(){
+			me.content.removeClass(me.focusClass);
+		}).delay(500, this);
+	},
+	isMobile : function(){
+		if(this.content.hasClass(this.mobileClass)){
+			return true;
+		}else{
+			return false;
+		}
+	},
+	onResize: function(){
+		var width = window.getWidth();
+		if(width <= this.options.minWidth || isPhoneBrowser()){
+			this.content.addClass(this.mobileClass);
+//			this.options.onResize();
+		}else{
+			this.content.removeClass(this.mobileClass);
 		}
 	}
 }).extend({
-	/*topContent:null,
-	bottomContent:null,
-	leftContent:null,
-	rightContent:null,*/
-	mnmiceContent : null
+	mnmiceContent : null,
+	closeAll:function(){
+		$$('.content').hide();
+	}
 });

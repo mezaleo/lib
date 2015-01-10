@@ -6,18 +6,25 @@
 }
 
 .dialog_content {
+	border: 1px solid #ccc;
 	background-color: white;
 	position: fixed;
 	width: 30%;
 	min-width: 250px;
-	top: 20%;
+	top: 30%;
 	left: 35%;
 	-moz-box-shadow: 0px 0px 30px #555555	!important;
 	-webkit-box-shadow: 0px 0px 30px #555555	!important;
+	-ms-box-shadow: 0px 0px 30px #555555	!important;
 	box-shadow: 0px 0px 30px #555555	!important;
 	padding-bottom: 5px;
 	z-index: 10000;
 	opacity: 0;
+	
+	
+	/*IE*/
+filter:
+  progid:DXImageTransform.Microsoft.dropshadow(OffX=5, OffY=5, Color='#55555500');
 }
 
 .mini-browser-dialog > .dialog_title{

@@ -11,11 +11,11 @@ Content.Table = new Class({
 	searchAfterEnter:false,
 	pagClass : 'p_',
 	tableClass : 'tabla',
+	mobileRowClass:'m-tr',
 	tableIdPrefix:'id_',
 	previousText:'<',
 	nextText:'>',
 	jsonControllerPath:'controller/',
-	jsonGetAction: 'get',
 	jsonDeleteAction: 'delete',
 	jsonOkField: 'estado',
 	jsonOkValue: 1,
@@ -31,14 +31,28 @@ Content.Table = new Class({
 	searchInput:null,
 	tmpDataSource:null,
 	options: {
+		jsonGetAction:'get',
+		downloadList:false,
+		downloadListText:'Descargar Lista',
+		downloadListProperty:'excel_file',
+		conditionalFields:null,
+		lastRowButton:null,
+		addClassIf:null,
 		width:70,
+		filter:{},
+		height:'auto',
+		open:false,
+		basePath:'./',
+		searchable:true,
 		top:10,
 		draggable:false,
 		table:null,
 		deleteButton:false,
 		title:'Its a new table',
-		limite:10,
+		limite:100,
 		check:false,
+		radio:false,
+		header:null,
 		refreshButton:true,
 		minimizable:false,
 		onClick:function(obj){
@@ -48,9 +62,13 @@ Content.Table = new Class({
 	thead: null,
 	tbody: null,
 	currentClass: 1,
+	checkboxSelectAll:null,
 	minClass:1,
     initialize : function(o) {
-		this.parent(o)
+		this.setOptions(o);
+		o.onResize = this.onResize;
+		this.parent(o);
+		
 		if(Content.Table.tablesArray == null){
 			Content.Table.tablesArray = new Array();
 		}
@@ -71,27 +89,34 @@ Content.Table = new Class({
 		this.tfoot = new Element('tfoot').injectInside(this.tabla);
 		
 		this.setComment(this.options.comment);
-		
 		if(this.options.header != null && this.options.table != null){
-			this.getDataSource();
-			this.fillTable();
+//			this.getDataSource();
+//			this.fillTable();
 			//buscador
-			this.searchInput = new Element('input[type="text"][placeholder="Busqueda..."]',{
-				events:{
-					keyup:function(ev){
-						if(tabla.searchAfterEnter){
-							if(ev.key == 'enter'){
+			if(this.options.searchable == true){
+				this.searchInput = new Element('input[type="text"][placeholder="Busqueda..."]',{
+					events:{
+						keyup:function(ev){
+							if(tabla.searchAfterEnter){
+								if(ev.key == 'enter'){
+									tabla.filter(this.get('value'));
+								}
+							}else{
 								tabla.filter(this.get('value'));
 							}
-						}else{
-							tabla.filter(this.get('value'));
+							
 						}
-						
 					}
-				}
-			}).injectInside(this.topPanelBody);
+				}).injectInside(this.topPanelBody);
+			}
 		}
+		
 		this.buildPaginator();
+		if(this.options.downloadList){
+			this.addTopPanelButton(tabla.options.downloadListText, function() {
+				tabla.downloadTable();
+			});	
+		}
 		if(this.options.refreshButton){
 			this.addTopPanelButton('reload',function(){
 				tabla.refresh();
@@ -103,15 +128,20 @@ Content.Table = new Class({
 				var selected = tabla.getChecked();
 				var selected_count = selected.length;
 				if(selected_count > 0){
-					selected.each(function(s){
-						var obj = {};
-						var id = tabla.tableIdPrefix+tabla.options.table;
-						obj['accion']=tabla.jsonDeleteAction;
-						obj[id] = s[id];
-						new RequestAjax(tabla.jsonControllerPath + tabla.options.table+'.php',obj);
+					new Dialog.Confirm('Seguro desea eliminar los registros seleccionados?',{
+						onOk:function(){
+							selected.each(function(s){
+								var obj = {};
+								var id = tabla.tableIdPrefix+tabla.options.table;
+								obj['accion']=tabla.jsonDeleteAction;
+								obj[id] = s[id];
+								new RequestAjax(tabla.jsonControllerPath + tabla.options.table+'.php',obj);
+							});
+							tabla.refresh();
+							new Dialog(tabla.deleteSuccessText);
+						}
 					});
-					tabla.refresh();
-					new Dialog(tabla.deleteSuccessText);
+					
 				}else{
 					new Dialog(tabla.noElementChecked);
 				}
@@ -119,6 +149,9 @@ Content.Table = new Class({
 				
 			});
 		}
+		this.currentClass = 1;
+		this.showRows(this.pagClass + this.currentClass);
+		
 		
 	},
 	setComment : function(comentario) {
@@ -128,74 +161,196 @@ Content.Table = new Class({
 	addHead : function(arr){
 		var tabla = this;
 		var tr = new Element('tr').injectInside(this.thead);
-		if(this.options.check && 2 == 3){
-			var th = new Element('th.checkbox').injectInside(tr);
-			new Element('input[type="checkbox"]#selectall',{
-				events:{
-					click:function(){
-						if(this.get('checked') == true){
-							tabla.tbody.getElements('[type="checkbox"]').set('checked',true);
-						}else{
-							tabla.tbody.getElements('[type="checkbox"]').set('checked',false);
+		if(!this.isMobile()){
+			if(this.options.check){
+				var th = new Element('th.checkbox').injectInside(tr);
+				tabla.checkboxSelectAll = new Element('input[type="checkbox"]#selectall',{
+					events:{
+						click:function(){
+							if(this.get('checked') == true){
+								tabla.tbody.getElements('[type="checkbox"]').set('checked',true).fireEvent('check');
+							}else{
+								tabla.tbody.getElements('[type="checkbox"]').set('checked',false).fireEvent('check');
+							}
 						}
 					}
+				}).injectInside(th);
+			}
+			if(this.options.radio){
+				var th = new Element('th').injectInside(tr);
+			}
+			arr.each(function(v,k){
+				if(v instanceof Object){
+					var th = new Element('th',{html:v.text}).injectInside(tr);
+					if(v.width != null){
+						th.setStyle('width',v.width);
+					}
+				}else{
+					var th = new Element('th',{html:v}).injectInside(tr);
 				}
-			}).injectInside(th);
+				
+			});
+			if(this.options.lastRowButton != null){
+				var th = new Element('th').injectInside(tr);
+			}
+		}else{
+			
 		}
-		arr.each(function(v,k){
-			var th = new Element('th',{html:v}).injectInside(tr);
-		});
 	},
 	addRow : function(arr,props){
 		var tabla = this;
-		var tr = new Element('tr').injectInside(this.tbody);
-		var td = new Element('td').injectInside(tr);
 		
-		if(this.countAllByClass(this.pagClass+this.currentClass) == this.options.limite){
-			tr.addClass(this.pagClass+(++this.currentClass));
-			
-		}else{
-			tr.addClass(this.pagClass+(this.currentClass));
-		}
 		
-		if(this.options.check && 2 == 3){
-			var td = new Element('td.checkbox').injectInside(tr);
-			var ck = new Element('input[type="checkbox"]',{
-				object:Object.toQueryString(props)
-			}).injectInside(td);
-			ck.addEvents({
-				mouseenter:function(){
-					this.addClass('ckhover');
-				},
-				mouseleave:function(){
-					this.removeClass('ckhover');
-				}
-			});
-			if(this.options.onClick != null){
-				tr.addEvent('click',function(){
-					if(!ck.hasClass('ckhover')){
-						tabla.options.onClick(props);
-					}
-				});
+		
+		if(!this.isMobile()){
+			var tr = new Element('tr').injectInside(this.tbody);
+		
+			if(this.countAllByClass(this.pagClass+this.currentClass) == this.options.limite){
+				tr.addClass(this.pagClass+(++this.currentClass));
+				
+			}else{
+				tr.addClass(this.pagClass+(this.currentClass));
 			}
 			
-		}
-		
-		arr.each(function(v){
-			var div = new Element('div').injectInside(td);
-			if (typeof(v) == 'object' && v != null) {
-                v.injectInside(div);
-            } else {
-                div.set('html', v);
-            }
+			if(this.options.check){
+				var td = new Element('td.checkbox').injectInside(tr);
+				var ck = new Element('input[type="checkbox"]',{
+					object:Object.toQueryString(props)
+				}).injectInside(td);
+				ck.addEvents({
+					mouseenter:function(){
+						this.addClass('ckhover');
+					},
+					mouseleave:function(){
+						this.removeClass('ckhover');
+					},
+					check:function(){
+						if(this.checked){
+							tr.addClass('checked');
+						}else{
+							tr.removeClass('checked');
+						}
+					},
+					click:function(){
+						this.fireEvent('check');
+					}
+				});
+				if(this.options.onClick != null){
+					tr.addEvent('click',function(){
+						if(!ck.hasClass('ckhover')){
+							tabla.options.onClick(props);
+						}
+					});
+				}
+			}else{
+				if(this.options.onClick != null){
+					tr.addEvent('click',function(){
+						tabla.options.onClick(props);
+					});
+				}
+			}
 			
-		});
+			if(this.options.radio){
+				var td = new Element('td.radio').injectInside(tr);
+				var ck = new Element('input[type="radio"][name="radio"]',{
+					object:Object.toQueryString(props)
+				}).injectInside(td);
+				ck.addEvents({
+					mouseenter:function(){
+						this.addClass('ckhover');
+					},
+					mouseleave:function(){
+						this.removeClass('ckhover');
+					},
+					check:function(){
+						if(this.checked){
+							tr.addClass('checked');
+						}else{
+							tr.removeClass('checked');
+						}
+					},
+					click:function(){
+						this.fireEvent('check');
+					}
+				});
+				if(this.options.onClick != null){
+					tr.addEvent('click',function(){
+						if(!ck.hasClass('ckhover')){
+							tabla.options.onClick(props);
+						}
+					});
+				}
+			}
+	
+			
+			if(tabla.options.addClassIf != null){
+				if(props[tabla.options.addClassIf.field] == tabla.options.addClassIf.equalTo){
+					tr.addClass(tabla.options.addClassIf.className);
+				}
+			}
+			arr.each(function(v){
+				var div = new Element('td').injectInside(tr);
+				if (v instanceof Object) {
+	                v.injectInside(div);
+	            } else {
+	                div.set('html', v);
+	            }
+				
+			});
+			if(this.options.lastRowButton != null){
+				if(this.options.lastRowButton.addIf == null
+						|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
+	
+					var td = new Element('td').injectInside(tr);
+					new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+						events:{
+							click:function(){
+								tabla.options.lastRowButton.onClick(props);
+							}
+						}
+					}).injectInside(td);
+				}else{
+					var td = new Element('td').injectInside(tr);
+				}
+			}
+		}else{
+//			if(tabla.options.addClassIf != null){
+//				if(props[tabla.options.addClassIf.field] == tabla.options.addClassIf.equalTo){
+//					tr.addClass(tabla.options.addClassIf.className);
+//				}
+//			}
+			var tr = new Element('div').injectInside(this.tbody);
+			arr.each(function(v){
+				var div = new Element('div').injectInside(tr);
+				if (v instanceof Object) {
+	                v.injectInside(div);
+	            } else {
+	                div.set('html', v);
+	            }
+				
+			});
+//			if(this.options.lastRowButton != null){
+//				if(this.options.lastRowButton.addIf == null
+//						|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
+//	
+//					var td = new Element('td').injectInside(tr);
+//					new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+//						events:{
+//							click:function(){
+//								tabla.options.lastRowButton.onClick(props);
+//							}
+//						}
+//					}).injectInside(td);
+//				}else{
+//					var td = new Element('td').injectInside(tr);
+//				}
+//			}
+			tr.addClass(this.mobileRowClass);
+		}
 	},
 	fillTable: function(){
 		this.resetBody();
 		var tabla = this;
-		//this.tmpDataSource = this.dataSource;
-		//this.dataSource = (new RequestAjax(this.jsonControllerPath + this.options.table+'.php',{accion:tabla.jsonGetAction}));
 		if(this.tmpDataSource[this.jsonOkField] == this.jsonOkValue){
 			this.tmpDataSource = this.tmpDataSource.campos;
 			if(this.tmpDataSource.length > 0){
@@ -209,17 +364,29 @@ Content.Table = new Class({
 						tabla.headerValues.push(h.alias);
 					});
 					//add table header
-//					this.addHead(this.headerValues);	
+					this.addHead(this.headerValues);	
 				}
-				if(this.tmpDataSource.lengtj <= this.options.limite){
+				if(this.tmpDataSource.length <= this.options.limite){
 					this.hidePaginator();
 				}
 				this.tmpDataSource.each(function(d,k){
 					var arr = new Array();
 					tabla.options.header.each(function(h){
 						var val = d[h.field];
+						if(tabla.options.conditionalFields != null
+							&& tabla.options.conditionalFields.length > 0){
+							tabla.options.conditionalFields.each(function(f){
+								if(f.field == h.field){
+									if(d[h.field] == f.equalTo){
+										val = f.thenValue;
+									}else{
+										val = f.elseValue;
+									}
+								}
+							});
+						}
 						if(val != null){
-							arr.push(val.capitalize());
+							arr.push(val);
 						}else{
 							console.log(h.field+' No existe en el objeto.');
 							arr.push('');
@@ -229,9 +396,10 @@ Content.Table = new Class({
 					tabla.tableValues.push(arr);
 					tabla.addRow(arr,d);
 				});
+				//this.addRow(rows);
 				this.currentClass = 1;
 				this.showRows(this.pagClass + this.currentClass);
-				//this.addRow(rows);
+				
 				if(this.countAllByClass(this.pagClass + (this.minClass+1)) == 0){
 					this.hideNext();
 				}	
@@ -305,21 +473,23 @@ Content.Table = new Class({
 		this.tmpDataSource = this.dataSource;
 		this.fillTable();
 	},
-	filter:function(val){
+	filter:function(searchValue){
 		var tabla = this;
 		if(tabla.dataSource != null && tabla.dataSource.campos.length > 0){
-			console.log();
 			var filter = new Array();
 			tabla.dataSource.campos.each(function(d){
-				var str = Object.toQueryString(d);
-				if((str.toUpperCase()).test(val.toUpperCase())){
-					filter.push(d);
+				try{
+				Object.each(d,function(value,key){
+					if(value.toUpperCase().test(searchValue.toUpperCase())){
+						filter.push(d);
+						throw 'brack';
+					}
+				});
+				}catch(e){
 				}
 			});
 			tabla.setDataSource(filter);
-			//console.log(filter);
 			tabla.fillTable();
-			
 		}
 	},
 	vaciar : function(){
@@ -332,6 +502,9 @@ Content.Table = new Class({
 	showRows:function(c){
 		this.hideRows();
 		this.getByClass(c).setStyle('display','table-row');
+	},
+	showAllRows:function(){
+		this.tbody.getElements('tr').setStyle('display','table-row');
 	},
 	resetHead : function(){
 		this.tabla.getElement('thead').empty();
@@ -400,7 +573,12 @@ Content.Table = new Class({
 	},
 	getDataSource:function(){
 		var tabla = this;
-		this.dataSource = (new RequestAjax(this.jsonControllerPath + this.options.table+'.php',{accion:tabla.jsonGetAction}));
+		var getObj = {accion:tabla.options.jsonGetAction};
+		if(this.options.filter != null){
+			getObj = Object.merge(getObj,this.options.filter);
+		}
+		
+		this.dataSource = (new RequestAjax(this.options.basePath + this.jsonControllerPath + this.options.table+'.php',getObj));
 		this.tmpDataSource = this.dataSource;
 	},
 	refresh:function(){
@@ -408,6 +586,9 @@ Content.Table = new Class({
 		this.currentClass = 1;
 		this.hidePrevious();
 		this.fillTable();
+		if(this.checkboxSelectAll != null){
+			this.checkboxSelectAll.set('checked',false);
+		}
 	},
 	addButton:function(text,fn){
 		new Element('input[type="button"][value="'+text+'"]',{
@@ -415,12 +596,38 @@ Content.Table = new Class({
 				click:fn
 			}
 		}).injectInside(this.optionsLabel);
+	},
+	open : function() {
+		if(this.options.table != null){
+			this.refresh();
+		}
+		this.parent();
+	},
+	downloadTable : function(){
+		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];
+	},
+	onResize: function(){
+		this.parent();
+		if(this.isMobile()){
+			this.tbody.getElements('tr').each(function(tr){
+				var tdArr = tr.getElements('td');
+				var largo = tdArr.length;
+				if(largo > 1){
+					var t = new Element('td[colspan="'+largo+'"]');
+					tdArr.each(function(td){
+						new Element('div[html="'+td.get('html')+'"]').injectInside(t);
+						td.destroy();
+					});
+					t.injectInside(tr);
+				}
+				
+			});
+		}
 	}
 }).extend({
 	contentClass:'cntnt-tb',
 	tablesArray:null,
 	hideAll:function(){
-		console.log(Content.Table.tablesArray);
 		Content.Table.tablesArray.each(function(t){
 			t.close();
 		});
