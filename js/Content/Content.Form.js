@@ -166,38 +166,14 @@ Content.Form = new Class({
 				var me = this;
 				var field;
 				var values = Object.toQueryString(props.values);
-//				var c = new Element('select');
-//				var c2 = new Element('div.new-cmb',{
-//					events:{
-//						click:function(){
-//							if(this.hasClass('visible')){
-//								this.removeClass('visible');
-//							}else{
-//								this.addClass('visible');
-//							}
-//						}
-//					}
-//				}).injectInside(this.fields);
-//				var ct2 = new Element('a[html="'+props.name+'"]').injectInside(c2);
-//				var cul2 = new Element('ul',{
-//					styles:{
-//						'width':c2.getStyle('width').toInt() + 5
-//					}
-//				}).injectInside(c2);
 				
-//				props.values.each(function(v){
-//					new Element('option[html="'+v[props.valueName]+'"][value="'+v[props.indexName]+'"]').injectInside(c);
-//					new Element('li[html="'+v[props.valueName]+'"][value="'+v[props.indexName]+'"]',{
-//						events:{
-//							click:function(){
-//								c2.set('id_value',v[props.indexName]);
-//								ct2.set('html',v[props.valueName]);
-//							}
-//						}
-//					}).injectInside(cul2);
-//				});
-//				console.log(c);
-//				c.injectInside(this.fields);
+				// var lbl = new Element('span').injectInside(this.fields);
+				//var c = new Element('select[name="'+props.name.trim().toLowerCase()+'"]').injectInside(lbl);
+				//new Element('option[value=""]').injectInside(c);
+				
+				// props.values.each(function(v){
+					// new Element('option[html="'+v[props.valueName]+'"][value="'+v[props.indexName]+'"]').injectInside(c);
+				// });
 				
 				
 				field = new Element('input[type="text"][placeholder="'+props.title.trim()+'"][name="'+props.name.trim().toLowerCase()+'"][values="'+values+'"].'+this.comboClass).addClass(me.requiredClass);
