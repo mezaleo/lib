@@ -12,6 +12,7 @@ Content.Table = new Class({
 	pagClass : 'p_',
 	tableClass : 'tabla',
 	mobileRowClass:'m-tr',
+	mobileRowLongTextClass:'lngtxtreg',
 	tableIdPrefix:'id_',
 	previousText:'<',
 	nextText:'>',
@@ -29,6 +30,7 @@ Content.Table = new Class({
 	tableValues:null,
 	paginatorDefined: false,
 	searchInput:null,
+	longTextLength:30,
 	tmpDataSource:null,
 	options: {
 		jsonGetAction:'get',
@@ -49,6 +51,7 @@ Content.Table = new Class({
 		table:null,
 		deleteButton:false,
 		title:'Its a new table',
+		mobileListTitle:'Lista de registros.',
 		limite:100,
 		check:false,
 		radio:false,
@@ -109,6 +112,8 @@ Content.Table = new Class({
 					}
 				}).injectInside(this.topPanelBody);
 			}
+		}else if(this.options.header != null){
+			this.fillHeader();
 		}
 		
 		this.buildPaginator();
@@ -155,11 +160,11 @@ Content.Table = new Class({
 		
 	},
 	setComment : function(comentario) {
-		//console.log(comentario);
 		this.comentario.set('html',comentario);
 	},
 	addHead : function(arr){
 		var tabla = this;
+		this.tmpHeadValues = arr;
 		var tr = new Element('tr').injectInside(this.thead);
 		if(!this.isMobile()){
 			if(this.options.check){
@@ -194,24 +199,49 @@ Content.Table = new Class({
 				var th = new Element('th').injectInside(tr);
 			}
 		}else{
-			
+			this.setComment(this.options.mobileListTitle);
 		}
 	},
 	addRow : function(arr,props){
 		var tabla = this;
 		
+		var tr = new Element('tr').injectInside(this.tbody);
 		
-		
-		if(!this.isMobile()){
-			var tr = new Element('tr').injectInside(this.tbody);
-		
-			if(this.countAllByClass(this.pagClass+this.currentClass) == this.options.limite){
-				tr.addClass(this.pagClass+(++this.currentClass));
-				
-			}else{
-				tr.addClass(this.pagClass+(this.currentClass));
-			}
+		if(this.countAllByClass(this.pagClass+this.currentClass) == this.options.limite){
+			tr.addClass(this.pagClass+(++this.currentClass));
 			
+		}else{
+			tr.addClass(this.pagClass+(this.currentClass));
+		}
+		if(tabla.options.addClassIf != null){
+			if (tabla.options.addClassIf instanceof Array) {
+				tabla.options.addClassIf.each(function(cond){
+					if(props[cond.field] == cond.equalTo){
+						tr.addClass(cond.className);
+					}
+				});
+            } else if(props[tabla.options.addClassIf.field] == tabla.options.addClassIf.equalTo){
+				tr.addClass(tabla.options.addClassIf.className);
+			}
+		}
+		
+		if(this.isMobile()){
+			var lngTd = new Element('td').injectInside(tr);
+			var dc = new Element('div.drow').injectInside(lngTd);
+			arr.each(function(v){
+				var div = new Element('div').inject(dc,'top');
+				if (v instanceof Object) {
+	                v.injectInside(div);
+	            } else {
+	            	if(v.length >= tabla.longTextLength){
+	            		div.addClass(tabla.mobileRowLongTextClass);
+	            		dc.grab(div,'bottom');
+	            	}
+	                div.set('html', v);
+	            }
+				
+			});
+		}else{
 			if(this.options.check){
 				var td = new Element('td.checkbox').injectInside(tr);
 				var ck = new Element('input[type="checkbox"]',{
@@ -250,44 +280,6 @@ Content.Table = new Class({
 				}
 			}
 			
-			if(this.options.radio){
-				var td = new Element('td.radio').injectInside(tr);
-				var ck = new Element('input[type="radio"][name="radio"]',{
-					object:Object.toQueryString(props)
-				}).injectInside(td);
-				ck.addEvents({
-					mouseenter:function(){
-						this.addClass('ckhover');
-					},
-					mouseleave:function(){
-						this.removeClass('ckhover');
-					},
-					check:function(){
-						if(this.checked){
-							tr.addClass('checked');
-						}else{
-							tr.removeClass('checked');
-						}
-					},
-					click:function(){
-						this.fireEvent('check');
-					}
-				});
-				if(this.options.onClick != null){
-					tr.addEvent('click',function(){
-						if(!ck.hasClass('ckhover')){
-							tabla.options.onClick(props);
-						}
-					});
-				}
-			}
-	
-			
-			if(tabla.options.addClassIf != null){
-				if(props[tabla.options.addClassIf.field] == tabla.options.addClassIf.equalTo){
-					tr.addClass(tabla.options.addClassIf.className);
-				}
-			}
 			arr.each(function(v){
 				var div = new Element('td').injectInside(tr);
 				if (v instanceof Object) {
@@ -313,41 +305,19 @@ Content.Table = new Class({
 					var td = new Element('td').injectInside(tr);
 				}
 			}
-		}else{
-//			if(tabla.options.addClassIf != null){
-//				if(props[tabla.options.addClassIf.field] == tabla.options.addClassIf.equalTo){
-//					tr.addClass(tabla.options.addClassIf.className);
-//				}
-//			}
-			var tr = new Element('div').injectInside(this.tbody);
-			arr.each(function(v){
-				var div = new Element('div').injectInside(tr);
-				if (v instanceof Object) {
-	                v.injectInside(div);
-	            } else {
-	                div.set('html', v);
-	            }
-				
+		}
+		return tr;
+	},
+	fillHeader:function(){
+		var tabla = this;
+		if(this.headerValues.length == 0){
+			this.options.header.each(function(h){
+				tabla.headerValues.push(h.alias);
 			});
-//			if(this.options.lastRowButton != null){
-//				if(this.options.lastRowButton.addIf == null
-//						|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
-//	
-//					var td = new Element('td').injectInside(tr);
-//					new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
-//						events:{
-//							click:function(){
-//								tabla.options.lastRowButton.onClick(props);
-//							}
-//						}
-//					}).injectInside(td);
-//				}else{
-//					var td = new Element('td').injectInside(tr);
-//				}
-//			}
-			tr.addClass(this.mobileRowClass);
+			this.addHead(this.headerValues);	
 		}
 	},
+	fillBody:function(){},
 	fillTable: function(){
 		this.resetBody();
 		var tabla = this;
@@ -359,13 +329,7 @@ Content.Table = new Class({
 				var rows = new Array();
 				//var head = new Array();
 				//set header
-				if(this.headerValues.length == 0){
-					this.options.header.each(function(h){
-						tabla.headerValues.push(h.alias);
-					});
-					//add table header
-					this.addHead(this.headerValues);	
-				}
+				this.fillHeader();
 				if(this.tmpDataSource.length <= this.options.limite){
 					this.hidePaginator();
 				}
@@ -608,21 +572,16 @@ Content.Table = new Class({
 	},
 	onResize: function(){
 		this.parent();
+		this.resetHead();
 		if(this.isMobile()){
-			this.tbody.getElements('tr').each(function(tr){
-				var tdArr = tr.getElements('td');
-				var largo = tdArr.length;
-				if(largo > 1){
-					var t = new Element('td[colspan="'+largo+'"]');
-					tdArr.each(function(td){
-						new Element('div[html="'+td.get('html')+'"]').injectInside(t);
-						td.destroy();
-					});
-					t.injectInside(tr);
-				}
-				
-			});
+			this.setComment(this.options.mobileListTitle);
+		}else{
+			this.comentario.hide();
+			this.addHead(this.tmpHeadValues);
 		}
+	},
+	hideComment:function(){
+		this.comentario.hide();
 	}
 }).extend({
 	contentClass:'cntnt-tb',

@@ -28,7 +28,7 @@ filter:
 }
 
 .mini-browser-dialog > .dialog_title{
-	font-size: 25px	!important;
+	font-size: 20px	!important;
 }
 
 .dialog_title {
@@ -44,7 +44,7 @@ filter:
 	font-size: 17px;
 }
 .mini-browser-dialog > .dialog_text_content{
-	font-size: 25px	!important;
+	font-size: 20px	!important;
 }
 
 

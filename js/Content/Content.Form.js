@@ -24,7 +24,8 @@ Content.Form = new Class({
 		height:'auto',
 		align:'center',
 		editable:true,
-		values:null
+		values:null,
+		minWidth:900
 	},
 	initialize : function(opt) {
 		this.parent(opt);
@@ -58,6 +59,28 @@ Content.Form = new Class({
 			return true;
 		}
 	}.protect(),
+	addImage : function(name,url){
+		if(url != null){
+			if(!this.existElement(url)){
+				var img = new Element('div[name="'+name+'"].img_label',{
+					styles:{
+						'background-image': 'url('+url+')'
+					}
+				}).injectInside(this.fields);
+				
+				this.elementArr.push({
+					element:img,
+					setUrl:function(u){
+						img.set('background-image','url('+u+')');
+					}
+				});
+				console.log(this.addFieldExistError);
+			}
+		}else{
+			console.log('Debe asignar un nombre al elemento');
+		}
+		
+	},
 	addTextLabel : function(text,name){
 		if(name != null){
 			if(!this.existElement(name)){

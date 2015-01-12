@@ -1,3 +1,18 @@
+.c-mini > .tabla {
+	overflow-x: hidden	!important;
+}
+.c-mini > .tabla > div.tcomentario{
+	display:block	!important;
+	margin-bottom: 0px;
+	
+	
+	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
+	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);
+	background-color: #1F89E6;
+	background-repeat: repeat-x;
+	color: #ffffff;
+	border: 1px solid #428bca;
+}
 .tabla>div.tcomentario {
 	background-image: -webkit-linear-gradient(top, #d9edf7 0, #b9def0 100%);
 	background-image: linear-gradient(to bottom, #d9edf7 0, #b9def0 100%);
@@ -56,38 +71,27 @@
 .tabla>table>tbody>tr{
 	display:none;
 }
-.tabla>table>tbody>div{
-	background-color: white;
-	color:	#555555;
-	padding: 5px 7px;
-	cursor: default;
-	font-size: 13px;
-	border-bottom: 1px solid #ccc;
-	text-transform: uppercase	!important;
-	
-	transition: .2s;
-	-ms-transition: .2s;
-	-webkit-transition: .2s;
-	-moz-transition: .2s;
-	-o-transition: .2s;
+.tabla>table>thead{
+	overflow:hidden	!important;
 }
-.tabla>table>tbody>div>div{
-	width: auto	!important;
+/*MOBILE LIST*/
+.tabla>table>tbody>tr>td >div.drow{
+	text-align: left;
+	width: 90%;
+	float:left	!important;
+}
+.tabla>table>tbody>tr>td >div.drow > div{
+	text-align: justify;
 	display:inline-block;
-	padding: 3px;
-	margin: 2px;
-	font-size: 12px;
+	padding: 5px	!important;
 }
-.tabla>table>tbody>div>div:nth-child(1),
-.tabla>table>tbody>div>div:nth-child(2){
-	font-size: 14px	!important;
-	font-weight: bold	!important;
+.tabla>table>tbody>tr>td >div.drow > div:first-child{
+	float: right;
+	margin-right: 5px;
 }
-.tabla>table>tbody>div>div:nth-child(2){
-	margin-right: 30px;
-}
-.tabla>table>tbody>div>div:nth-child(3){
-	float:right;
+.tabla>table>tbody>tr>td >div.drow > div.lngtxtreg{
+	font-size: 11px	!important;
+	display:block;
 }
 /*CRITICO*/
 .tabla>table>tbody>tr.critico>td{
@@ -108,6 +112,26 @@
 }
 .tabla>table>tbody>tr.critico.checked:hover>td:first-child{
 	border-left: 8px solid #cc0000 !important;
+}
+/*POSITIVO*/
+.tabla>table>tbody>tr.positivo>td{
+	background-color: #E9FFE3;
+	color: #157F00;
+}
+.tabla>table>tbody>tr.positivo:hover>td{
+	background-color: #D4FFCA;
+}
+.tabla>table>tbody>tr.positivo.checked>td{
+	background-color: #CCFFC0;
+}
+.tabla>table>tbody>tr.positivo.checked:hover>td{
+	background-color: #C4FEB6;
+}
+.tabla>table>tbody>tr.positivo.checked>td:first-child{
+	border-left: 8px solid #36C911 !important;
+}
+.tabla>table>tbody>tr.positivo.checked:hover>td:first-child{
+	border-left: 8px solid #36C911 !important;
 }
 /*DISABLED*/
 .tabla>table>tbody>tr.disabled>td{

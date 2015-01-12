@@ -141,16 +141,18 @@ var Menu = new Class( {
 			html : text,
 			events : {
 				click : function(){
-                    if(props.closeAll == null || props.closeAll == true){
-                        Page.closeAll();
-                    }
+//                    if(props.closeAll == null || props.closeAll == true){
+//                        Page.closeAll();
+//                    }
 					
-					if(props.page != null){
-						var page = props.page;
-						page.open();
-						window.location='#'+text;
-					}else{
-						props.onClick();					
+					if(props != null){
+						if(props.page != null){
+							var page = props.page;
+							page.open();
+							window.location='#'+text;
+						}else{
+							props.onClick();					
+						}	
 					}
 					
 					menu.sub_cfg.removeClass('menu-sub-open');
@@ -159,8 +161,10 @@ var Menu = new Class( {
 			}
 		});
 
-		if(props.href != null){op.set('href',props.href);}
-		if(props.tel != null){op.set('tel',props.tel);}
+		if(props != null){
+			if(props.href != null){op.set('href',props.href);}
+			if(props.tel != null){op.set('tel',props.tel);}
+		}
 		
 		if(this.currentOptions >= this.options.optionsLimit || window.getWidth() <= this.options.minWidth || isPhoneBrowser()){
 			this.makeMoreButton();

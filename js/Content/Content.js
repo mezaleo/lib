@@ -122,9 +122,7 @@ var Content = new Class({
 						if(me.content.hasClass(me.mnmicedClass) == false){
 							var drag = new Drag.Move(me.content, {
 								container: me.options.contentElement,
-								//droppables: $$('.drop'),
 								onStart: function(element, droppable){
-								  $$('.' + me.contentClass).removeClass(me.focusClass);
 								},
 								onDrag: function(element, droppable){
 									element.addClass(me.draggingClass);
