@@ -118,15 +118,22 @@ body,* {
 	width: 90%;
 }
 
-.content>.fields>select {
+.content>.fields>span {
 	background-color: #ffffff;
 	border: 1px solid #ccc;
-	margin-top: -0.1px;
-	display: block;
+	width: 100%	!important;
+	display:block;
+	padding-left: 5px;
+}
+.content>.fields>span.focus {
+	border: 1px solid #3A65DD	!important;
+	color: #3A65DD	!important;
+}
+.content>.fields>span>select {
+	background-color: #ffffff;
+	border: 0px solid transparent	!important;
+	padding-left: 0px !important;
 	width: 100%;
-	-webkit-transition: all 0.5s ease;
-	overflow: hidden;
-
 }
 .content>.fields>div.img_label {
 	background-color: #ffffff;
