@@ -10,6 +10,7 @@ Content.Form = new Class({
 	formClass:'c-frm',
 	buttonTag:'button',
 	comboClass:'combo',
+	comboEmptyText:'Seleccione valor',
 	validateRutClass:'validate-rut',
 	validateEmailClass:'validate-email',
 	validationFailedMessage:'Existen datos incorrectos',
@@ -167,58 +168,47 @@ Content.Form = new Class({
 				var field;
 				var values = Object.toQueryString(props.values);
 				
-				// var lbl = new Element('span').injectInside(this.fields);
-				//var c = new Element('select[name="'+props.name.trim().toLowerCase()+'"]').injectInside(lbl);
-				//new Element('option[value=""]').injectInside(c);
+				var lbl = new Element('span').injectInside(this.fields);
+				field = new Element('select[indexName="'+props.indexName+'"][valueName="'+props.valueName+'"][name="'+props.name.trim().toLowerCase()+'"]').injectInside(lbl);
+				new Element('option[value=""][html="'+this.comboEmptyText+'"]').injectInside(field);
 				
-				// props.values.each(function(v){
-					// new Element('option[html="'+v[props.valueName]+'"][value="'+v[props.indexName]+'"]').injectInside(c);
-				// });
+				props.values.each(function(v){
+					new Element('option[html="'+v[props.valueName]+'"][value="'+v[props.indexName]+'"]').injectInside(field).addClass(me.requiredClass);
+				});
 				
-				
-				field = new Element('input[type="text"][placeholder="'+props.title.trim()+'"][name="'+props.name.trim().toLowerCase()+'"][values="'+values+'"].'+this.comboClass).addClass(me.requiredClass);
 				(props.required != null && props.required == false)?field.removeClass(me.requiredClass):null
-				field.injectInside(this.fields);
 				field.addEvents({
 					focus:function(){
-						var v = this.get('values');
-						v = (v.parseQueryString());
-						var a = Object.values(v);
-						props.values = a;
-						this.addClass('focus');
-						me.setComboValues(props,this).showComboValues();
 					},
 					blur:function(){
-						this.removeClass('focus');
 					}
 				});
 				if(props.onChange != null){
 					field.addEvent('change',function(){
 						props.onChange(field);
-						
 					});
 				}
+
 				if(this.options.editable == false){
 					field.set('readonly',true);
 				}
+				
 				var ob = {element:field,
 						updateValues:function(arr){
-							field.set('values',Object.toQueryString(arr));
+							me.setComboValues(arr, field);
 						},
 						getText:function(){
 							return field.get('value');
 						},
 						getValue:function(){
-							return field.get('id');
+							return field.get('value');
 						}};
 				this.elementArr.push(ob);
 				return ob;
 			}else{
 				props.type = 'text';
-				//console.log(props.values);
 				this.addField(props);
 			}
-			
 		}else{
 			console.log(this.addFieldExistError);
 		}
@@ -226,13 +216,9 @@ Content.Form = new Class({
 	getFormValues : function(){
 		var me = this;
 		var values = {};
-		
-		$(this.fields).getElements('input').each(function(e){
+		$(this.fields).getElements('input,select').each(function(e){
 			var name = e.get('name');
 			var value = e.get('value');
-			if(e.hasClass(me.comboClass)){
-				value = e.get('id');
-			}
 			values[name] = value;
 		});
 		return values;
@@ -319,5 +305,30 @@ Content.Form = new Class({
 		}else{
 			console.log(this.addFieldExistError);
 		}
+	},
+	setComboValues : function(props,el){
+		this.comboValues.empty();
+		var me = this;
+		if(el != null){
+			el.empty();
+			var indexName = el.get('indexName');
+			var valueName = el.get('valueName');
+			props.each(function(v){
+				var valor = "";
+				if(valueName.test(" ")){
+					var vls = valueName.split(" ");
+					if(vls.length > 0){
+						vls.each(function(a){
+							valor = valor + " " + v[a];
+						});
+					}
+				}else{
+					valor = v[valueName];
+				}
+				console.log(valor);
+				new Element('option[html="' + valor + '"][value="'+v[indexName]+'"]').injectInside(el);
+			});
+		}
+		return this;
 	}
 });

@@ -241,6 +241,12 @@ Content.Table = new Class({
 	            }
 				
 			});
+			
+			if(this.options.onClick != null){
+				tr.addEvent('click',function(){
+					tabla.options.onClick(props);
+				});
+			}
 		}else{
 			if(this.options.check){
 				var td = new Element('td.checkbox').injectInside(tr);
@@ -469,6 +475,7 @@ Content.Table = new Class({
 	},
 	showAllRows:function(){
 		this.tbody.getElements('tr').setStyle('display','table-row');
+		this.hidePaginator();
 	},
 	resetHead : function(){
 		this.tabla.getElement('thead').empty();
@@ -497,12 +504,14 @@ Content.Table = new Class({
 		return arr;
 	},
 	showPaginator: function(){
-		this.showNext();
-		this.showPrevious();
+//		this.showNext();
+//		this.showPrevious();
+		this.tfoot.show();
 	},
 	hidePaginator: function(){
-		this.hideNext();
-		this.hidePrevious();
+//		this.hideNext();
+//		this.hidePrevious();
+		this.tfoot.hide();
 	},
 	showNext: function(){
 		if(!this.paginatorDefined){
@@ -574,9 +583,9 @@ Content.Table = new Class({
 		this.parent();
 		this.resetHead();
 		if(this.isMobile()){
-			this.setComment(this.options.mobileListTitle);
+			this.showMessage(this.options.mobileListTitle);
 		}else{
-			this.comentario.hide();
+			this.hideMessage();
 			this.addHead(this.tmpHeadValues);
 		}
 	},

@@ -225,43 +225,6 @@ var Content = new Class({
 			console.log('</Debugging>\n\n');
 		}
 	},
-	setComboValues : function(props,el){
-		this.comboValues.empty();
-		var me = this;
-		if(el != null){		
-			props.values.each(function(v){
-				
-				var valor = "";
-				if(props.valueName.test(" ")){
-					var vls = (props.valueName).split(" ");
-					if(vls.length > 0){
-						vls.each(function(a){
-							valor = valor + " " + v[a];
-						});
-					}
-				}else{
-					valor = v[props.valueName];
-				}
-				
-				
-				
-				new Element('div[html="'+valor+'"]',{
-					events:{
-						click:function(){
-							el.set('id',v[props.indexName]);
-							el.set('value',valor);
-							me.hideComboValues();
-							this.addClass('selected');
-							if(props.onChange!=null){
-								props.onChange(me);
-							}
-						}
-					}
-				}).injectInside(me.comboValues);
-			});
-		}
-		return this;
-	},
 	showComboValues : function(){
 		this.comboValuesContent.addClass('showing');
 		this.hideBody();
@@ -286,7 +249,7 @@ var Content = new Class({
 		this.fields.removeClass('hidden');
 		this.buttons.removeClass('hidden');
 	},
-	hideMessage : function(message){
+	hideMessage : function(){
 		$(this.messageLabel).hide();
 	},
 	setTitle : function(text){

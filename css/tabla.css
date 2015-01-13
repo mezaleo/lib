@@ -1,17 +1,17 @@
 .c-mini > .tabla {
 	overflow-x: hidden	!important;
+	margin-top: 0px	!important;
 }
-.c-mini > .tabla > div.tcomentario{
-	display:block	!important;
+.c-mini > div.message-label{
 	margin-bottom: 0px;
-	
-	
 	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
 	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);
 	background-color: #1F89E6;
 	background-repeat: repeat-x;
 	color: #ffffff;
 	border: 1px solid #428bca;
+	width: 97%	!important;
+	padding: 10px 0px 10px 3%;
 }
 .tabla>div.tcomentario {
 	background-image: -webkit-linear-gradient(top, #d9edf7 0, #b9def0 100%);
@@ -31,7 +31,7 @@
 	background-color:  #fafafa;
 	width:	99%	!important;
 	margin-top: 20px	!important;
-	padding-bottom: 20px;
+/*	padding-bottom: 20px;*/
 	border: 1px solid #f3f3f3;
 }
 .tabla>table {
