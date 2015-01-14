@@ -131,14 +131,19 @@ Content.Form = new Class({
 				}
 			}else if(props.type == 'date'){
 				field.addClass(this.dateFieldClass);
-				new CalendarEightysix(field, {
-	                'theme': 'vista',
-	                'alignX':'middle',
-	                'startMonday': true,
-	                'format': '%Y-%m-%d',
-	                'toggler': field,
-	                'disallowUserInput': false
-	            });
+				new Picker.Date(field, {
+					positionOffset: {x: 5, y: 0},
+					pickerClass: 'datepicker_minimal',
+					useFadeInOut: !Browser.ie
+				});
+				// new CalendarEightysix(field, {
+	                // 'theme': 'vista',
+	                // 'alignX':'middle',
+	                // 'startMonday': true,
+	                // 'format': '%Y-%m-%d',
+	                // 'toggler': field,
+	                // 'disallowUserInput': false
+	            // });
 			}
 			
 			field.injectInside(this.fields);

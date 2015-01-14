@@ -56,8 +56,8 @@ Content.Table = new Class({
 		check:false,
 		radio:false,
 		header:null,
-		refreshButton:true,
-		minimizable:false,
+		refreshButton:false,
+		minimizable:true,
 		onClick:function(obj){
 		}
 	},
@@ -90,6 +90,7 @@ Content.Table = new Class({
 		this.thead = new Element('thead').injectInside(this.tabla);
 		this.tbody = new Element('tbody').injectInside(this.tabla);
 		this.tfoot = new Element('tfoot').injectInside(this.tabla);
+		this.hidePaginator();
 		
 		this.setComment(this.options.comment);
 		if(this.options.header != null && this.options.table != null){
@@ -208,7 +209,7 @@ Content.Table = new Class({
 				var th = new Element('th').injectInside(tr);
 			}
 		}else{
-			this.setComment(this.options.mobileListTitle);
+			this.showMessage(this.options.mobileListTitle);
 		}
 	},
 	addRow : function(arr,props){
@@ -242,7 +243,7 @@ Content.Table = new Class({
 				if (v instanceof Object) {
 	                v.injectInside(div);
 	            } else {
-	            	if(v.length >= tabla.longTextLength){
+	            	if(v != null && v.length >= tabla.longTextLength){
 	            		div.addClass(tabla.mobileRowLongTextClass);
 	            		dc.grab(div,'bottom');
 	            	}
@@ -294,15 +295,94 @@ Content.Table = new Class({
 					});
 				}
 			}
-			
+			//var count
 			arr.each(function(v){
 				var div = new Element('td').injectInside(tr);
+				var a = tr.getElements('td[class!="checkbox"]');
+				var b = a.length - 1;
+				var c = tabla.options.header[b];
+				
 				if (v instanceof Object) {
 	                v.injectInside(div);
 	            } else {
-	                div.set('html', v);
+					if(c.editable != null ){
+						var add = false;
+						
+						console.log(c);
+						if(!('onlyWhenEqualTo' in c.editable)){
+							console.log('undefined');
+							add = true;
+						}else if(c.editable.onlyWhenEqualTo == v){
+							console.log(c.editable.onlyWhenEqualTo + '==' + v);
+							add = true;
+						}
+						if(add){
+							console.log(c.editable.type);
+							var inp = null;
+							if(c.editable.type == null || c.editable.type == 'date'){
+								inp = new Element('input[type="text"][disabled="true"][old-value="'+v+'"].tbletxt').injectInside(div);
+							}else if(c.editable.type == 'combo'){
+								
+								inp = new Combo({
+									values:{
+										arr:[{id:'1',text:'Uno'},{id:'2',text:'Dos'}]
+									}
+								});
+								inp.addClass('tbleslct');
+								inp.set('old-value',v);
+								inp.injectInside(div);
+								div.set('nowrap','nowrap');
+							}
+							
+							var btn = new Element('input[type="button"].toedit',{
+								events:{
+									click:function(){
+										if(this.hasClass('toedit')){
+											this.removeClass('toedit');
+											this.addClass('editing');
+											inp.set('disabled',false);
+											inp.select();
+										}else {
+											console.log(c.editable);
+											if(c.editable.allowEmpty != null && c.editable.allowEmpty == false){
+												if(inp.get('value') == '' || inp.get('value') == null){
+													new Dialog('No se permiten valores vacios.');
+													return;
+												}
+											}
+										
+											this.addClass('toedit');
+											this.removeClass('editing');
+											inp.set('disabled',true);
+											inp.set('new-value',inp.get('value'));
+											var old = inp.get('old-value');
+											var nw = inp.get('new-value');
+											inp.set('old-value',nw);
+											if(c.editable.handler != null){
+												c.editable.handler(old,nw);
+											}
+										}
+									}
+								}
+							}).injectInside(div);
+							if(c.editable.type != null){
+								if(c.editable.type == 'date'){
+									new Picker.Date(inp, {
+										positionOffset: {x: 5, y: 0},
+										format: (c.editable.format != null)?c.editable.format:'%d/%m/%Y',
+										pickerClass: 'datepicker_minimal',
+										useFadeInOut: !Browser.ie
+									});
+								}
+							}
+							inp.set('value',v);						
+						}else{
+							div.set('html', v);
+						}
+					}else{
+						div.set('html', v);
+					}
 	            }
-				
 			});
 			if(this.options.lastRowButton != null){
 				if(this.options.lastRowButton.addIf == null

@@ -1,6 +1,13 @@
 //console.log(new Date());
 window.addEvent('domready',function(){
 
+Element.implement({
+	setFocus: function(index) {
+		this.setAttribute('tabIndex',index || 0);
+		this.focus();
+	}
+});
+
 var menu = new Menu( {
 	title : 'Titulo',
 	optionsLimit : 7
@@ -17,7 +24,7 @@ var form1 = new Content.Form({
 	title:'Formulario de ingreso',
 	width: 30,
 	align:'left',
-	minimizable:false,
+	minimizable:true,
 	values:{
 		field01:'Name',
 		combo:'1'
@@ -46,8 +53,6 @@ form1.addField({
 	type:'date',
 	name:'field03'
 });
-
-
 form1.addButton({closeOnClick:false,type:'success',name:'btnAceptar',value:'Aceptar',
 	onClick:function(values,event,frm){
 		var r = new RequestAjax('http://lbtvvosap03.cl.lan.com:9256/appdeferredWeb/deferral/admDeferral.do',{method:'validate-fullreg'});
@@ -56,9 +61,45 @@ form1.addButton({closeOnClick:false,type:'success',name:'btnAceptar',value:'Acep
 });
 
 
-//new Field();
+var table1 = new Content.Table({
+	title:'Lista 001',
+	width: 40,
+	draggable:true,
+	check:true,
+	header:[
+		{
+			alias:'Campo1'
+		},
+		{
+			alias:'Editable',
+			editable:{			
+				onlyWhenEqualTo:null,
+				format: '%Y-%m-%d',
+				type:'date',
+				allowEmpty:false,
+				handler:function(oldValue,newValue){
+					new Dialog("old:" + oldValue + " new:" + newValue);
+				}
+			}
+		},
+		{
+			alias:'Select',
+			editable:{			
+				type:'combo',
+				handler:function(oldValue,newValue){
+					new Dialog("old:" + oldValue + " new:" + newValue);
+				}
+			}
+		}
+	]
+});
+table1.addRow(['1','14-01-2015',1]);
+table1.addRow(['1',null,2]);
+table1.addRow(['1','14-01-2015',1]);
+table1.showAllRows();
+table1.show();
 
 
 });
 
-
+//c.injectInside(document.body);

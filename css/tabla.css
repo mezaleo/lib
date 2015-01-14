@@ -235,6 +235,52 @@
 .tabla>table>tbody>tr>td>button.rowButton:hover {
 	background-color: #25709C;
 }
+
+.tabla>table>tbody>tr>td>select.tbleslct {
+	border:	1px solid #3A65DD;
+	background-color:	transparent;
+	margin: -5px 2px -5px -2px !important;
+	width: 80%;
+	float: none	!important;
+	text-align: center;
+}
+.tabla>table>tbody>tr>td>select[disabled].tbleslct {
+	border:	1px solid transparent	!important;
+}
+.tabla>table>tbody>tr>td>input.tbletxt {
+	border:	1px solid #3A65DD;
+	background-color:	transparent;
+	margin: -5px 2px -5px -2px !important;
+	width: 80%;
+	float: none	!important;
+	text-align: center;
+}
+.tabla>table>tbody>tr>td>input[disabled].tbletxt {
+	border:	1px solid transparent	!important;
+}
+.tabla>table>tbody>tr>td>input[type="button"].toedit,
+.tabla>table>tbody>tr>td>input[type="button"].editing {
+	border:	1px solid #ccc;
+	border-radius: 3px;
+	cursor:pointer;
+	background-color:	transparent;
+	width: 25px;
+	height: 25px;
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.tabla>table>tbody>tr>td>input[type="button"].toedit {
+	background-image: url(../js/Content/images/icon-edit.png);
+}
+.tabla>table>tbody>tr>td>input[type="button"].editing {
+	background-image: url(../js/Content/images/right.jpg);
+}
+.tabla>table>tbody>tr>td>input.tbletxt:focus,
+.tabla>table>tbody>tr>td>select.tbleslct:focus {
+	border:	1px solid #3A65DD;
+	font-weight:bold;
+	color: #3A65DD;
+}
 .tabla>table>tbody>tr.hide {
 	display: none;
 	transition: .6s;
