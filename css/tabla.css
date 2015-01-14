@@ -1,15 +1,25 @@
+.content.cntnt-tb.c-mini {
+	left:1%	!important;
+	width: 93.4%	!important;
+	top: 15%;
+}
 .c-mini > .tabla {
 	overflow-x: hidden	!important;
 	margin-top: 0px	!important;
 }
 .cntnt-tb.c-mini > div.message-label{
 	margin-bottom: 0px;
-	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
-	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);
-	background-color: #1F89E6;
-	background-repeat: repeat-x;
-	color: #ffffff;
-	border: 1px solid #428bca;
+/*	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);*/
+/*	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);*/
+	background-color: #ffffff;
+/*	background-repeat: repeat-x;*/
+	display:block;
+	color: #232323;
+	border: 1px solid #f1f1f1;
+	border-bottom:1px solid #ccc;
+	font-weight:200;
+	font-size: 14px;
+	letter-spacing:1px;
 	width: 97%	!important;
 	padding: 10px 0px 10px 3%;
 }
@@ -30,7 +40,7 @@
 .tabla {
 	background-color:  #fafafa;
 	width:	99%	!important;
-	margin-top: 20px	!important;
+/*	margin-top: 20px	!important;*/
 /*	padding-bottom: 20px;*/
 	border: 1px solid #f3f3f3;
 }

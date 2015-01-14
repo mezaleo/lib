@@ -30,7 +30,7 @@ Content.Table = new Class({
 	tableValues:null,
 	paginatorDefined: false,
 	searchInput:null,
-	longTextLength:30,
+	longTextLength:20,
 	tmpDataSource:null,
 	options: {
 		jsonGetAction:'get',
@@ -162,11 +162,20 @@ Content.Table = new Class({
 	setComment : function(comentario) {
 		this.comentario.set('html',comentario);
 	},
+	hideHead : function(){
+		this.thead.hide();
+	},
+	showHead : function(){
+		this.thead.show();
+		if(this.thead.getElements('tr > th').length == 0){
+			this.addHead(this.tmpHeadValues);
+		}
+	},
 	addHead : function(arr){
 		var tabla = this;
 		this.tmpHeadValues = arr;
 		var tr = new Element('tr').injectInside(this.thead);
-		if(!this.isMobile()){
+		if(!this.isMobile() && arr != null){
 			if(this.options.check){
 				var th = new Element('th.checkbox').injectInside(tr);
 				tabla.checkboxSelectAll = new Element('input[type="checkbox"]#selectall',{
@@ -504,13 +513,9 @@ Content.Table = new Class({
 		return arr;
 	},
 	showPaginator: function(){
-//		this.showNext();
-//		this.showPrevious();
 		this.tfoot.show();
 	},
 	hidePaginator: function(){
-//		this.hideNext();
-//		this.hidePrevious();
 		this.tfoot.hide();
 	},
 	showNext: function(){
@@ -581,6 +586,21 @@ Content.Table = new Class({
 	},
 	hideComment:function(){
 		this.comentario.hide();
+	},
+	onResize : function(){
+		this.parent();
+		this.hideMessage();
+		this.hideHead();
+		if(this.isMobile()){
+			this.showMessage(this.options.mobileListTitle);
+		}else{
+			this.showHead();
+			if(this.tbody.getElements('*').length > 0){
+				if(this.tbody.getFirst().getElements('td').length == 1){
+					this.tbody.getElements('tr > td').set('colspan',this.thead.getElements('tr > th').length);
+				}
+			}
+		}
 	}
 }).extend({
 	contentClass:'cntnt-tb',

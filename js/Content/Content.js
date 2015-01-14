@@ -365,7 +365,6 @@ var Content = new Class({
 		var width = window.getWidth();
 		if(width <= this.options.minWidth || isPhoneBrowser()){
 			this.content.addClass(this.mobileClass);
-//			this.options.onResize();
 		}else{
 			this.content.removeClass(this.mobileClass);
 		}
