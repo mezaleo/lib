@@ -22,21 +22,6 @@ table.default,table.add,table.list { /*	border: 1px solid #ccc;*/
 	margin: 0 auto;
 	padding: 10px 20px 40px 20px;
 }
-[type=text],[type=password],select {
-	border: 1px solid #ccc;
-	height: 30px;
-	font-size: 15px;
-	padding-left: 5px;
-}
-
-[type=text]:focus,
-select:focus,
-[type=password]:focus {
-	border: 1px solid #158DB5;
-	height: 30px;
-	font-size: 15px;
-	padding-left: 5px;
-}
 
 [type=text].large {
 	width: 100%;
@@ -205,13 +190,6 @@ form #myResult:empty {
 	padding: 0;
 }
 
-form .spinner {
-	border-radius: 3px;
-	/*  -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;*/
-	background-color: #f0f0f0;
-}
-
 form .overTxtLabel {
 	color: #888888;
 }
@@ -253,44 +231,6 @@ input[value*="Nuev"],input[value*="Tomad"],input[value="En transporte"],.btn_ver
 	margin: 0 auto !important;
 }
 
-.scrolled {
-	overflow-x: auto;
-	overflow-y: auto;
-}
-
-.scrolled::-webkit-scrollbar {
-	width: 10px;
-	height: 10px;
-}
-
-.scrolled::-webkit-scrollbar-thumb {
-	background-color: rgba(0, 0, 0, 0.2);
-	-webkit-box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.10), inset 0 -1px 0
-		rgba(0, 0, 0, 0.07);
-}
-
-.scrolled::-webkit-scrollbar-button {
-	width: 0;
-	height: 0;
-	display: none;
-}
-
-.scrolled::-webkit-scrollbar-corner {
-	background-color: transparent;
-}
-
-.scrolled>div {
-	display: block;
-}
-
-.btn_mas {
-	background-image: url(images/add.png);
-	background-color: transparent;
-	border: 0px solid !important;
-	background-size: 100% 100%;
-	width: 25px;
-	height: 25px;
-}
 #body_contenedor {
 
 }

@@ -2,7 +2,7 @@
 	overflow-x: hidden	!important;
 	margin-top: 0px	!important;
 }
-.c-mini > div.message-label{
+.cntnt-tb.c-mini > div.message-label{
 	margin-bottom: 0px;
 	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
 	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);

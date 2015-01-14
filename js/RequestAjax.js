@@ -5,29 +5,34 @@ var RequestAjax = new Class( {
 			estado:500,
 			mensaje:'No se pudo realizar el Request a ' + url
 		};
-		var request = new Request.JSON( {
-			async : false,
-			url : url,
-			onRequest : function() {
-			},
-			onSuccess : function(response) {
-				if(response != null && 
-					response instanceof Object == true &&
-					response instanceof Array == false){
-					obj = response;
-				}
+		try{
+			var request = new Request.JSON( {
+				async : false,
+				url : url,
+				onRequest : function() {
+				},
+				onSuccess : function(response) {
+					if(response != null && 
+						response instanceof Object == true &&
+						response instanceof Array == false){
+						obj = response;
+					}
 
-			},
-			onFailure : function(xhr) {
-				obj = {
-					estado: 600,
-					mensaje: xhr.statusText,
-					obj: xhr
+				},
+				onFailure : function(xhr) {
+					obj = {
+						estado: 600,
+						mensaje: xhr.statusText,
+						obj: xhr
+					}
 				}
-			}
-		}).post(object);
-		//request.setHeader('Last-Modified', 'Sat, 1 Jan 2005 05:00:00 GMT');		
-		return obj;
-		//return request.response.json;
+			}).post(object);
+			//request.setHeader('Last-Modified', 'Sat, 1 Jan 2005 05:00:00 GMT');		
+			return obj;
+		}catch(ex){
+			console.log(ex);
+			obj.exception = ex;
+			return obj;
+		}
 	}
 });

@@ -9,6 +9,7 @@ var Content = new Class({
 	Implements : Options,
 	content: null,
 	spinner:null,
+	mimicClass:'mimic',
 	contentClass:'content',
 	openedClass:'opened',
 	hiddenClass:'hidden',
@@ -41,6 +42,7 @@ var Content = new Class({
 	minimalBorderDistance:20,//px
 	/*new properties for resize*/
 	mobileClass:'c-mini',
+	colorsArr:['#375BBD','#D3417C','#D34152','#41A3D3','#6BD341','#F3E629','#F37029','#F32929'],
 	options:{
 		contentElement:null,
 		open:true,
@@ -58,7 +60,8 @@ var Content = new Class({
 		confirmClose:false,
 		onClose:null,
 		/*new*/
-		minWidth:900
+		minWidth:900,
+		mimic:false
 	},
 	initialize : function(opt) {
 		var me = this;
@@ -71,6 +74,12 @@ var Content = new Class({
 		
 		this.setOptions(opt);
 		this.content = new Element('div.'+this.contentClass).injectInside(this.options.contentElement).setStyle('top',me.options.top+'%');
+		if(this.options.mimic){
+			this.content.addClass(this.mimicClass);
+			this.options.draggable=false;
+			this.options.closeable=false;
+			this.options.minimizable=false;
+		}
 		if(this.options.draggable){
 			this.content.addClass(this.draggableClass);
 		}
@@ -96,8 +105,8 @@ var Content = new Class({
 			}
 		}).injectInside(this.comboValuesContent);
 		
-		this.spinner = new Spinner(this.content);
-		this.spinner.hide();
+		// this.spinner = new Spinner(this.content);
+		// this.spinner.hide();
 		
 		//setting width and align
 		this.content.setStyle('width',this.options.width+'%');
@@ -261,24 +270,36 @@ var Content = new Class({
 	},
 	maximice : function(){
 		var me = this;
-		this.content.removeClass(this.mnmicedClass);
-		//this.content.addClass(this.mxmicedClass);
+		this.content.set('class',this.tmpClass);
 		this.mnmiceBtn.set('html','_');
 		this.options.contentElement.adopt(me.content);
+		this.content.removeEvent('click');
 	},
 	minimice : function(){
-		this.content.removeClass(this.mxmicedClass);
-		this.content.addClass(this.mnmicedClass);
-		this.mnmiceBtn.set('html','&#915;');
-		Content.mnmiceContent.grab(this.content,'top');
+		var me = this;
+		//this.mnmiceBtn.set('html','&#915;');
+		this.content.hide();
+		//this.tmpClass = this.content.get('class');
+		//this.content.set('class','');
+		//this.content.addClass(this.mnmicedClass);
+		//Content.mnmiceContent.grab(this.content,'top');
+		
+		new Element('div[html="'+me.title.get('html')+'"]',{
+			events:{
+				click:function(){
+					me.content.show();
+					this.destroy();
+				}
+			}
+		}).injectInside(Content.mnmiceContent);
 	},
 	showSpinner : function(){
 		this.content.addClass('loading');
-		this.spinner.show();
+		// this.spinner.show();
 	},
 	hideSpinner : function(){
 		$(this.content).removeClass('loading');
-		this.spinner.hide();
+		// this.spinner.hide();
 	},
 	open: function(){
 		this.content.show();
@@ -336,6 +357,9 @@ var Content = new Class({
 		}else{
 			return false;
 		}
+	},
+	isMinimiced : function(){
+		return this.content.hasClass(this.mnmicedClass);
 	},
 	onResize: function(){
 		var width = window.getWidth();

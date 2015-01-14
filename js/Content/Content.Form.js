@@ -130,6 +130,7 @@ Content.Form = new Class({
 					field.addClass(this.validateEmailClass);
 				}
 			}else if(props.type == 'date'){
+				field.addClass(this.dateFieldClass);
 				new CalendarEightysix(field, {
 	                'theme': 'vista',
 	                'alignX':'middle',
@@ -192,7 +193,12 @@ Content.Form = new Class({
 				if(this.options.editable == false){
 					field.set('readonly',true);
 				}
-				
+				if(this.options.values != null){
+					var fv = this.options.values[props.name.toLowerCase()];
+					if(fv != null){
+						field.set('value',fv);				
+					}
+				}
 				var ob = {element:field,
 						updateValues:function(arr){
 							me.setComboValues(arr, field);

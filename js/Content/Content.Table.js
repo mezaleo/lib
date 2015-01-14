@@ -579,16 +579,6 @@ Content.Table = new Class({
 	downloadTable : function(){
 		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];
 	},
-	onResize: function(){
-		this.parent();
-		this.resetHead();
-		if(this.isMobile()){
-			this.showMessage(this.options.mobileListTitle);
-		}else{
-			this.hideMessage();
-			this.addHead(this.tmpHeadValues);
-		}
-	},
 	hideComment:function(){
 		this.comentario.hide();
 	}

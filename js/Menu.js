@@ -12,7 +12,7 @@ var Menu = new Class( {
 		title:'Nombre Proyecto',
 		logo:'none',
 		optionsLimit:3,
-		minWidth:300
+		minWidth:900
 	},
 	initialize : function(options) {
 		this.setOptions(options);

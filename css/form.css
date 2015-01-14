@@ -214,14 +214,6 @@ input.big {
 	height: 10% !important;
 }
 
-.date {
-	background-image: url(images/calendar1.png);
-	background-size: 30px 30px;
-	background-repeat: no-repeat;
-	background-position: 99%;
-	cursor: pointer;
-}
-
 input[name *="correo"],input[name *="email"] {
 	text-transform: lowercase !important;
 }
