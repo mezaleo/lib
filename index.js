@@ -63,7 +63,7 @@ form1.addButton({closeOnClick:false,type:'success',name:'btnAceptar',value:'Acep
 
 var table1 = new Content.Table({
 	title:'Lista 001',
-	width: 40,
+	width: 37,
 	draggable:true,
 	check:true,
 	header:[
@@ -74,7 +74,7 @@ var table1 = new Content.Table({
 			alias:'Editable',
 			editable:{			
 				onlyWhenEqualTo:null,
-				format: '%Y-%m-%d',
+				format: '%d-%m-%Y',
 				type:'date',
 				allowEmpty:false,
 				handler:function(oldValue,newValue){
@@ -84,7 +84,8 @@ var table1 = new Content.Table({
 		},
 		{
 			alias:'Select',
-			editable:{			
+			editable:{
+				onlyWhenEqualTo:1,
 				type:'combo',
 				handler:function(oldValue,newValue){
 					new Dialog("old:" + oldValue + " new:" + newValue);

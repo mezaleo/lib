@@ -240,7 +240,7 @@
 	border:	1px solid #3A65DD;
 	background-color:	transparent;
 	margin: -5px 2px -5px -2px !important;
-	width: 80%;
+	width: 90px;
 	float: none	!important;
 	text-align: center;
 }
@@ -251,9 +251,8 @@
 	border:	1px solid #3A65DD;
 	background-color:	transparent;
 	margin: -5px 2px -5px -2px !important;
-	width: 80%;
+	width: 90px;
 	float: none	!important;
-	text-align: center;
 }
 .tabla>table>tbody>tr>td>input[disabled].tbletxt {
 	border:	1px solid transparent	!important;

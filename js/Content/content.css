@@ -709,6 +709,6 @@ form .validation-advice { /*   padding-bottom: 5px;*/
 	cursor: pointer;
 }
 /**/
-.datepicker_minimal {
+*[class*="datepicker"] {
 	z-index: 8010	!important;
 }
