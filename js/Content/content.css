@@ -51,6 +51,7 @@ body,* {
 	overflow-y: hidden;
 	height: 40px;
 	padding:0px	!important;
+	z-index: 10000;
 }
 .mnmice-content>div:hover {
 margin-bottom: 0px	!important;

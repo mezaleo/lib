@@ -16,7 +16,6 @@ Content.Table = new Class({
 	tableIdPrefix:'id_',
 	previousText:'<',
 	nextText:'>',
-	jsonControllerPath:'controller/',
 	jsonDeleteAction: 'delete',
 	jsonOkField: 'estado',
 	jsonOkValue: 1,
@@ -33,7 +32,11 @@ Content.Table = new Class({
 	longTextLength:20,
 	tmpDataSource:null,
 	options: {
+		jsonControllerPath:'controller/',
+		jsonControllerPageExtension:'.php',
 		jsonGetAction:'get',
+		jsonGetParameter:'accion',
+		dataSourceObjectsField:'campos',
 		downloadList:false,
 		downloadListText:'Descargar Lista',
 		downloadListProperty:'excel_file',
@@ -81,7 +84,7 @@ Content.Table = new Class({
 		this.tableValues = new Array();
 		var tabla = this;
 		this.content.addClass(Content.Table.contentClass);
-		this.fields.addClass(this.tableClass).addClass('scrolled').setStyle('height','300px');
+		this.fields.addClass(this.tableClass).addClass('scrolled');//.setStyle('height','300px');
 		
 //		this.content = new Element('div').injectInside(this.options.content).addClass(this.tableClass);
 		this.optionsLabel = new Element('div.tol').injectInside(this.fields);
@@ -139,9 +142,9 @@ Content.Table = new Class({
 							selected.each(function(s){
 								var obj = {};
 								var id = tabla.tableIdPrefix+tabla.options.table;
-								obj['accion']=tabla.jsonDeleteAction;
+								obj[tabla.options.jsonGetParameter]=tabla.jsonDeleteAction;
 								obj[id] = s[id];
-								new RequestAjax(tabla.jsonControllerPath + tabla.options.table+'.php',obj);
+								new RequestAjax(tabla.options.jsonControllerPath + tabla.options.table + tabla.options.jsonControllerPageExtension,obj);
 							});
 							tabla.refresh();
 							new Dialog(tabla.deleteSuccessText);
@@ -305,7 +308,7 @@ Content.Table = new Class({
 						var a = tr.getElements('td[class!="checkbox"]');
 						var b = a.length - 1;
 						var c = tabla.options.header[b];
-						if(c.editable != null ){
+						if(c != null && c.editable != null ){
 							var add = false;
 							
 							if(!('onlyWhenEqualTo' in c.editable)){
@@ -328,7 +331,12 @@ Content.Table = new Class({
 									inp.injectInside(div);
 									div.set('nowrap','nowrap');
 								}
-								
+								if(c.editable.width != null){
+									inp.setStyle('width',c.editable.width);
+								}
+								if(c.editable.maxLength != null){
+									inp.set('maxlength',c.editable.maxLength);
+								}
 								var btn = new Element('input[type="button"].toedit',{
 									events:{
 										click:function(){
@@ -354,12 +362,20 @@ Content.Table = new Class({
 												var old = inp.get('old-value');
 												var nw = inp.get('new-value');
 												inp.set('old-value',nw);
-												if(('onlyWhenEqualTo' in c.editable)){
-													div.empty();
-													div.set('html',nw);
-												}
-												if(c.editable.handler != null){
-													c.editable.handler(old,nw);
+												
+												if(nw != old){
+													if(c.editable.handler != null){
+														if(c.editable.handler(old,nw,props) == true){
+															if(('onlyWhenEqualTo' in c.editable)){
+																div.empty();
+																div.set('html',nw);
+															}else{
+																inp.set('value',nw);
+															}
+														}else{
+															inp.set('value',v);
+														}
+													}
 												}
 											}
 										}
@@ -382,6 +398,25 @@ Content.Table = new Class({
 						}else{
 							div.set('html', v);
 						}
+						if(div != null && v != null && v != ''){
+							if(c.truncate != null && v.length > c.truncate.length){
+								var nv = v.substr(0,c.truncate.length);
+								div.set('html', nv);
+								new ToolTip(v,div);
+//								div.addEvents({
+//									'mouseenter':function(){
+//										div.set('html', v);
+//									},
+//									'mouseleave':function(){
+//										div.set('html', nv);
+//									}
+//								});
+//							}else{
+//								div.set('html', v);
+							}
+						}else{
+//							div.set('html', v);
+						}
 					}else{
 						div.set('html', v);
 					}
@@ -392,13 +427,17 @@ Content.Table = new Class({
 						|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
 	
 					var td = new Element('td').injectInside(tr);
-					new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+					var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
 						events:{
 							click:function(){
 								tabla.options.lastRowButton.onClick(props);
 							}
 						}
 					}).injectInside(td);
+					
+					if(this.options.lastRowButton.addClass != null){
+						bt.addClass(this.options.lastRowButton.addClass);
+					}
 				}else{
 					var td = new Element('td').injectInside(tr);
 				}
@@ -420,7 +459,7 @@ Content.Table = new Class({
 		this.resetBody();
 		var tabla = this;
 		if(this.tmpDataSource[this.jsonOkField] == this.jsonOkValue){
-			this.tmpDataSource = this.tmpDataSource.campos;
+			this.tmpDataSource = this.tmpDataSource[this.options.dataSourceObjectsField];
 			if(this.tmpDataSource.length > 0){
 				this.setComment('Se ha encontrado '+this.tmpDataSource.length + ((this.tmpDataSource.length > 1)?' registros.':' registro.'));
 				
@@ -450,7 +489,6 @@ Content.Table = new Class({
 						if(val != null){
 							arr.push(val);
 						}else{
-							console.log(h.field+' No existe en el objeto.');
 							arr.push('');
 						}
 						
@@ -468,10 +506,8 @@ Content.Table = new Class({
 			}else{
 				//this.hidePaginator();
 				//this.setComment('No existen registros.');
-				//console.log('No existen registros.');
 			}
 		}else{
-			//console.log(this.tmpDataSource[this.jsonMessageField]);
 			this.setComment(this.tmpDataSource[this.jsonMessageField]);
 		}
 	},
@@ -530,6 +566,9 @@ Content.Table = new Class({
 			
 		}
 	},
+	setFilter:function(obj){
+		this.options.filter = obj;
+	},
 	clearFilter:function(){
 		this.searchInput.set('value','');
 		this.tmpDataSource = this.dataSource;
@@ -537,9 +576,9 @@ Content.Table = new Class({
 	},
 	filter:function(searchValue){
 		var tabla = this;
-		if(tabla.dataSource != null && tabla.dataSource.campos.length > 0){
+		if(tabla.dataSource != null && tabla.dataSource[tabla.options.dataSourceObjectsField].length > 0){
 			var filter = new Array();
-			tabla.dataSource.campos.each(function(d){
+			tabla.dataSource[tabla.options.dataSourceObjectsField].each(function(d){
 				try{
 				Object.each(d,function(value,key){
 					if(value.toUpperCase().test(searchValue.toUpperCase())){
@@ -627,29 +666,37 @@ Content.Table = new Class({
 	},
 	setDataSource:function(arr){
 		if(arr != null && arr.length > 0){
-			this.tmpDataSource = {estado:1,mensaje:'Todo ok',campos:arr};
+			this.tmpDataSource = {estado:1,mensaje:'Todo ok'};
+			this.tmpDataSource[this.options.dataSourceObjectsField] = arr;
 		}else{
-			this.tmpDataSource = {estado:2,mensaje:'No se encontraron registros',campos:arr};
+			this.tmpDataSource = {estado:2,mensaje:'No se encontraron registros'};
+			this.tmpDataSource[this.options.dataSourceObjectsField] = arr;
 		}
 	},
 	getDataSource:function(){
 		var tabla = this;
-		var getObj = {accion:tabla.options.jsonGetAction};
+//		var getObj = {accion:tabla.options.jsonGetAction};
+		var getObj = {};
+		getObj[tabla.options.jsonGetParameter] = tabla.options.jsonGetAction;
+		
 		if(this.options.filter != null){
 			getObj = Object.merge(getObj,this.options.filter);
 		}
 		
-		this.dataSource = (new RequestAjax(this.options.basePath + this.jsonControllerPath + this.options.table+'.php',getObj));
+		this.dataSource = (new RequestAjax(this.options.basePath + this.options.jsonControllerPath + this.options.table + this.options.jsonControllerPageExtension,getObj));
 		this.tmpDataSource = this.dataSource;
+		
+		return this.dataSource;
 	},
 	refresh:function(){
-		this.getDataSource();
+		var ds = this.getDataSource();
 		this.currentClass = 1;
 		this.hidePrevious();
 		this.fillTable();
 		if(this.checkboxSelectAll != null){
 			this.checkboxSelectAll.set('checked',false);
 		}
+		return ds;
 	},
 	addButton:function(text,fn){
 		new Element('input[type="button"][value="'+text+'"]',{
@@ -659,10 +706,10 @@ Content.Table = new Class({
 		}).injectInside(this.optionsLabel);
 	},
 	open : function() {
+		this.parent();
 		if(this.options.table != null){
 			this.refresh();
 		}
-		this.parent();
 	},
 	downloadTable : function(){
 		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];

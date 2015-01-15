@@ -1,0 +1,10 @@
+.lmtooltip {
+	border:	1px solid #ccc;
+	background-color: 	#FFFFDC;
+	position: absolute;
+	max-width: 200px;
+	padding: 10px;
+	text-transform: uppercase;
+	font-family: 'Tahoma';
+	text-align:justify;
+}

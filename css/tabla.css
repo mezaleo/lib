@@ -58,9 +58,6 @@
 }
 .tabla>table>thead>tr>th { /*	background-color: #EFF4F7;*/
 	padding: 10px;
-	/*	color: #3E91C8;*/ /*	font-weight: bold;*/ /*	font-size: 11px;*/
-	/*	border-top: 1px solid #3E91C8;*/
-	/*	border-bottom: 1px solid #3E91C8;*/ /*	text-transform: uppercase;*/
 	text-align: left;
 	text-shadow: 0 -1px 0 #3071a9;
 	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);
@@ -265,14 +262,14 @@
 	background-color:	transparent;
 	width: 25px;
 	height: 25px;
-	background-size: 100% 100%;
-	background-repeat: no-repeat;
+/* 	background-size: 100% 100%; */
+/* 	background-repeat: no-repeat; */
 }
 .tabla>table>tbody>tr>td>input[type="button"].toedit {
-	background-image: url(../js/Content/images/icon-edit.png);
+	background-image: url(../js/Content/images/icon-edit2.png);
 }
 .tabla>table>tbody>tr>td>input[type="button"].editing {
-	background-image: url(../js/Content/images/right.jpg);
+	background-image: url(../js/Content/images/right2.jpg);
 }
 .tabla>table>tbody>tr>td>input.tbletxt:focus,
 .tabla>table>tbody>tr>td>select.tbleslct:focus {

@@ -49,6 +49,7 @@ var Content = new Class({
 		debug:false,
 		title:'<Sin Titulo>',
 		top:10,
+		//left:10,
 		width:20,
 		height:70,
 		align:'center',
@@ -65,6 +66,7 @@ var Content = new Class({
 	},
 	initialize : function(opt) {
 		var me = this;
+		this.options.minimizable = false;	//on evaluation
 		if(this.options.contentElement == null){
 			this.options.contentElement = document.body;
 		}
@@ -121,6 +123,9 @@ var Content = new Class({
 			this.content.setStyle('right',this.minimalBorderDistance);
 		}else if(this.options.align == 'left'){
 			this.content.setStyle('left',this.minimalBorderDistance);
+		}
+		if('left' in this.options){
+			this.content.setStyle('left',this.options.left);
 		}
 		
 		this.closeBar = new Element('div.'+this.closeBarClass,{
@@ -269,22 +274,21 @@ var Content = new Class({
 		this.resumeTitle.set('html',text.toString().substring(0, this.resumeTitleLength) + ' ...');
 	},
 	maximice : function(){
-		var me = this;
-		this.content.set('class',this.tmpClass);
-		this.mnmiceBtn.set('html','_');
-		this.options.contentElement.adopt(me.content);
-		this.content.removeEvent('click');
+//		var me = this;
+//		this.content.set('class',this.tmpClass);
+//		this.mnmiceBtn.set('html','_');
+//		this.options.contentElement.adopt(me.content);
+////		this.content.removeEvent('click');
+//		this.minimiceElement.destroy();
+//		console.log('mmmmmmmmmmmmmmmmm');
+//		this.content.show();
+		this.content.show();
 	},
 	minimice : function(){
 		var me = this;
-		//this.mnmiceBtn.set('html','&#915;');
 		this.content.hide();
-		//this.tmpClass = this.content.get('class');
-		//this.content.set('class','');
-		//this.content.addClass(this.mnmicedClass);
-		//Content.mnmiceContent.grab(this.content,'top');
-		
-		new Element('div[html="'+me.title.get('html')+'"]',{
+
+		this.minimiceElement = new Element('div[html="'+me.title.get('html')+'"]',{
 			events:{
 				click:function(){
 					me.content.show();
@@ -302,7 +306,11 @@ var Content = new Class({
 		// this.spinner.hide();
 	},
 	open: function(){
-		this.content.show();
+		if(this.isMinimiced()){
+			this.maximice();
+		}else{
+			this.content.show();
+		}
 	},
 	show:function(){
 		this.open();
