@@ -45,13 +45,14 @@ var Content = new Class({
 	colorsArr:['#375BBD','#D3417C','#D34152','#41A3D3','#6BD341','#F3E629','#F37029','#F32929'],
 	options:{
 		contentElement:null,
+		buttonsOnTop:false,
 		open:true,
 		debug:false,
 		title:'<Sin Titulo>',
 		top:10,
 		//left:10,
 		width:20,
-		height:70,
+		height:'auto',
 		align:'center',
 		draggable:true,
 		minimizable:false,
@@ -205,8 +206,6 @@ var Content = new Class({
 		
 		
 		this.resumeTitle = new Element('div.'+this.resumeTitleClass).injectInside(this.closeBar);
-		
-		//this.tabContent = new Element('div.'+this.tabContentClass).injectInside(this.content);
 
 		//Title
 		this.title = new Element('div.'+this.titleClass,{
@@ -230,7 +229,12 @@ var Content = new Class({
 		}
 
 		this.fields = new Element('form.'+this.fieldsClass).injectInside(this.content);
-		this.buttons = new Element('div.'+this.buttonsClass).injectInside(this.content);
+		this.buttons = new Element('div.'+this.buttonsClass);
+		if(this.options.buttonsOnTop == true){
+			this.buttons.inject(this.fields,'before');
+		}else{
+			this.buttons.injectInside(this.content);
+		}
 		//debug trace
 		if(this.options.debug == true){
 			console.log('\n\n<Debugging>');
@@ -331,6 +335,7 @@ var Content = new Class({
 	},
 	addTopPanelButton:function(type,fn){
 		this.topPanel.show();
+		var b;
 		if(type == 'add' || type == 'reload' || type == 'delete'){
 			var title = null;
 			if(type == 'add'){
@@ -340,13 +345,14 @@ var Content = new Class({
 			}else if(type == 'delete'){
 					title = 'Eliminar registro';	
 			}
-			var b = new Element('div.panel-btn[title="'+title+'"]').injectInside(this.topPanelButtonContent).addClass(type).addEvent('click',fn);
+			b = new Element('div.panel-btn[title="'+title+'"]').injectInside(this.topPanelButtonContent).addClass(type).addEvent('click',fn);
 			if(type == 'add'){
 				b.set('html','+');
 			}
 		}else{
-			var b = new Element('button.panel-btn[html="'+type+'"]').injectInside(this.topPanelButtonContent).addEvent('click',fn);
+			b = new Element('button.panel-btn[html="'+type+'"]').injectInside(this.topPanelButtonContent).addEvent('click',fn);
 		}
+		return b;
 	},
 	focus:function(){
 		var me = this;

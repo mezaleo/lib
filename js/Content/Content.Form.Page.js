@@ -7,6 +7,7 @@ Content.Form.Page = new Class( {
 	Extends:Content.Form,
 	Implements : Options,
 	options : {
+		buttonsOnTop:true,
 		width:70,
 		height:'auto',
 		open:false,

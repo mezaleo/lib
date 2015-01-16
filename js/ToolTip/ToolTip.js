@@ -16,24 +16,23 @@ var ToolTip = new Class( {
 						left:this.getCoordinates().left
 					},
 					events:{
-						mouseenter:function(){
-							me.isHover = true;
-						},
 						mouseleave:function(){
-							me.isHover = false;
+							me.close();
 						}
 					}
 				}).injectInside(document.body);
-				me.isHover = true;
 				
 			},
 			'mouseleave':function(){
-				me.isHover = false;
-				if(me.content != null && me.isHover == false){
-					$(me.content).destroy();
-				}
+				me.close();
+			},
+			'click':function(){
+				me.close();
 			}
 		});
+	},
+	close: function(){
+		$(this.content).destroy();
 	},
 	open: function(){
 		this.content.show();

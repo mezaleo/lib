@@ -46,6 +46,8 @@ Content.Table = new Class({
 		width:70,
 		filter:{},
 		height:'auto',
+		tableHeight:400,
+		rowTitleField:null,
 		open:false,
 		basePath:'./',
 		searchable:true,
@@ -84,7 +86,7 @@ Content.Table = new Class({
 		this.tableValues = new Array();
 		var tabla = this;
 		this.content.addClass(Content.Table.contentClass);
-		this.fields.addClass(this.tableClass).addClass('scrolled');//.setStyle('height','300px');
+		this.fields.addClass(this.tableClass).addClass('scrolled').setStyle('height',this.options.tableHeight + 'px');
 		
 //		this.content = new Element('div').injectInside(this.options.content).addClass(this.tableClass);
 		this.optionsLabel = new Element('div.tol').injectInside(this.fields);
@@ -219,6 +221,9 @@ Content.Table = new Class({
 		var tabla = this;
 		
 		var tr = new Element('tr').injectInside(this.tbody);
+		if(props != null && this.options.rowTitleField != null && props[this.options.rowTitleField] != ''){
+			new ToolTip(props[this.options.rowTitleField],tr);
+		}
 		
 		if(this.countAllByClass(this.pagClass+this.currentClass) == this.options.limite){
 			tr.addClass(this.pagClass+(++this.currentClass));
@@ -403,19 +408,7 @@ Content.Table = new Class({
 								var nv = v.substr(0,c.truncate.length);
 								div.set('html', nv);
 								new ToolTip(v,div);
-//								div.addEvents({
-//									'mouseenter':function(){
-//										div.set('html', v);
-//									},
-//									'mouseleave':function(){
-//										div.set('html', nv);
-//									}
-//								});
-//							}else{
-//								div.set('html', v);
 							}
-						}else{
-//							div.set('html', v);
 						}
 					}else{
 						div.set('html', v);
