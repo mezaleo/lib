@@ -7,9 +7,6 @@ body,* {
 .content.mimic {
 	background-color: transparent	!important;
 	border-color:	transparent	!important;
-	-moz-box-shadow: none	!important;
-	-webkit-box-shadow: none	!important;
-	box-shadow: none	!important;
 }
 .content {
 	background-color: #fafafa;
@@ -26,8 +23,11 @@ body,* {
 }
 .content.c-mini {
 /*	border: 3px solid red !important;*/
-	width: 80%	!important;
+	width: 100%	!important;
 	left: 8%	!important;
+	-webkit-box-shadow: inset 0 3px 6px rgba(0,0,0,.05)	!important;
+	-moz-box-shadow: inset 0 3px 6px rgba(0,0,0,.05)	!important;
+	box-shadow: inset 0 3px 6px rgba(0,0,0,.05)	!important;
 }
 
 .content.focus {
@@ -108,18 +108,13 @@ margin-bottom: 0px	!important;
 }
 
 .content>.title {
-	/* width: 90%;
-	margin: 0 auto;
-	font-size: 30px;
-	font-family: 'Tahoma';
 	margin-bottom: 20px;
-	color:#003366; */
-	margin-bottom: 20px;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: 700;
 	color: #959595;
 	text-transform: uppercase;
 	letter-spacing: 1px;
+	padding:5px;
 }
 
 .content>.message-label {
@@ -553,6 +548,8 @@ margin-bottom: 0px	!important;
 }
 .c-frm.c-mini {
 	min-width: none	!important;
+	width: 76%	!important;
+	left: 10%	!important;
 }
 div.activo,div.inactivo,div.err {
 	text-align: center	!important;

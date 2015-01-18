@@ -315,10 +315,10 @@ var Content = new Class({
 		}else{
 			this.content.show();
 		}
+		this.focus();
 	},
 	show:function(){
 		this.open();
-		this.focus();
 		return this;
 	},
 	hide: function(){
@@ -366,11 +366,11 @@ var Content = new Class({
 		}).delay(500, this);
 	},
 	isMobile : function(){
-		if(this.content.hasClass(this.mobileClass)){
-			return true;
-		}else{
+//		if(this.content.hasClass(this.mobileClass)){
+//			return true;
+//		}else{
 			return false;
-		}
+//		}
 	},
 	isMinimiced : function(){
 		return this.content.hasClass(this.mnmicedClass);

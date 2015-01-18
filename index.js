@@ -71,16 +71,7 @@ var table1 = new Content.Table({
 			alias:'Campo1'
 		},
 		{
-			alias:'Editable',
-			editable:{			
-				onlyWhenEqualTo:null,
-				format: '%d-%m-%Y',
-				type:'date',
-				allowEmpty:false,
-				handler:function(oldValue,newValue){
-					new Dialog("old:" + oldValue + " new:" + newValue);
-				}
-			}
+			alias:'Editable'
 		},
 		{
 			alias:'Select',

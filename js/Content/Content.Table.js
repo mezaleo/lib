@@ -46,7 +46,9 @@ Content.Table = new Class({
 		width:70,
 		filter:{},
 		height:'auto',
-		tableHeight:400,
+		tableHeight:300,
+		tableHeading:'Table',
+		comment:null,
 		rowTitleField:null,
 		open:false,
 		basePath:'./',
@@ -86,18 +88,23 @@ Content.Table = new Class({
 		this.tableValues = new Array();
 		var tabla = this;
 		this.content.addClass(Content.Table.contentClass);
-		this.fields.addClass(this.tableClass).addClass('scrolled').setStyle('height',this.options.tableHeight + 'px');
+		this.fields.addClass(this.tableClass);
 		
 //		this.content = new Element('div').injectInside(this.options.content).addClass(this.tableClass);
-		this.optionsLabel = new Element('div.tol').injectInside(this.fields);
+		this.optionsLabel = new Element('div.ttitle',{html:tabla.options.tableHeading}).injectInside(this.fields);
 		this.comentario = new Element('div.tcomentario').injectInside(this.fields).hide();
-		this.tabla = new Element('table').injectInside(this.fields);
+		this.tableHead = new Element('div.table-head').injectInside(this.fields);
+		this.tableContent = new Element('div.table-content').injectInside(this.fields).addClass('scrolled').setStyle('height',this.options.tableHeight + 'px');
+		this.tabla = new Element('table').injectInside(this.tableContent);
 		this.thead = new Element('thead').injectInside(this.tabla);
 		this.tbody = new Element('tbody').injectInside(this.tabla);
 		this.tfoot = new Element('tfoot').injectInside(this.tabla);
 		this.hidePaginator();
 		
-		this.setComment(this.options.comment);
+		if(this.options.comment != null){
+			this.setComment(this.options.comment);
+		}
+		
 		if(this.options.header != null && this.options.table != null){
 //			this.getDataSource();
 //			this.fillTable();
@@ -166,7 +173,7 @@ Content.Table = new Class({
 		
 	},
 	setComment : function(comentario) {
-		this.comentario.set('html',comentario);
+		this.comentario.set('html',comentario).show();
 	},
 	hideHead : function(){
 		this.thead.hide();
@@ -213,6 +220,10 @@ Content.Table = new Class({
 			if(this.options.lastRowButton != null){
 				var th = new Element('th').injectInside(tr);
 			}
+//			var tr2 = tr.clone();
+//			tr2.injectInside(this.tableHead);
+			this.tableHead.adopt(tr);
+			
 		}else{
 			this.showMessage(this.options.mobileListTitle);
 		}
@@ -295,6 +306,26 @@ Content.Table = new Class({
 							tabla.options.onClick(props);
 						}
 					});
+				}
+				if(this.options.lastRowButton != null){
+					if(this.options.lastRowButton.addIf == null
+							|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
+		
+						var td = new Element('div').injectInside(tr);
+						var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+							events:{
+								click:function(){
+									tabla.options.lastRowButton.onClick(props);
+								}
+							}
+						}).injectInside(td);
+						
+						if(this.options.lastRowButton.addClass != null){
+							bt.addClass(this.options.lastRowButton.addClass);
+						}
+					}else{
+						var td = new Element('td').injectInside(tr);
+					}
 				}
 			}else{
 				if(this.options.onClick != null){
@@ -404,7 +435,7 @@ Content.Table = new Class({
 							div.set('html', v);
 						}
 						if(div != null && v != null && v != ''){
-							if(c.truncate != null && v.length > c.truncate.length){
+							if(c != null && c.truncate != null && v.length > c.truncate.length){
 								var nv = v.substr(0,c.truncate.length);
 								div.set('html', nv);
 								new ToolTip(v,div);
@@ -691,18 +722,20 @@ Content.Table = new Class({
 		}
 		return ds;
 	},
-	addButton:function(text,fn){
-		new Element('input[type="button"][value="'+text+'"]',{
-			events:{
-				click:fn
-			}
-		}).injectInside(this.optionsLabel);
-	},
+//	addButton:function(text,fn){
+//		new Element('input[type="button"][value="'+text+'"]',{
+//			events:{
+//				click:fn
+//			}
+//		}).injectInside(this.optionsLabel);
+//	},
 	open : function() {
 		this.parent();
 		if(this.options.table != null){
 			this.refresh();
 		}
+		this.focus();
+		this.resizeHead();
 	},
 	downloadTable : function(){
 		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];
@@ -710,20 +743,36 @@ Content.Table = new Class({
 	hideComment:function(){
 		this.comentario.hide();
 	},
+	resizeHead : function(){
+		console.log('resizeHead');
+		var me = this;
+		if(this.tbody.getFirst() != null && this.tableHead.getFirst() != null){
+			this.tbody.getFirst().getChildren('td').each(function(td,k){
+				var w = td.getStyle('width');
+				me.tableHead.getFirst().getChildren('th:nth-child('+(k+1)+')').setStyle('width',w);
+			});
+		}else{
+			console.log(this.tbody.getFirst());
+			console.log(this.tableHead.getFirst());
+		}
+	},
 	onResize : function(){
 		this.parent();
-		this.hideMessage();
-		this.hideHead();
-		if(this.isMobile()){
-			this.showMessage(this.options.mobileListTitle);
-		}else{
-			this.showHead();
-			if(this.tbody.getElements('*').length > 0){
-				if(this.tbody.getFirst().getElements('td').length == 1){
-					this.tbody.getElements('tr > td').set('colspan',this.thead.getElements('tr > th').length);
-				}
-			}
-		}
+
+		this.resizeHead();
+		
+//		this.hideMessage();
+//		this.hideHead();
+//		if(this.isMobile()){
+//			this.showMessage(this.options.mobileListTitle);
+//		}else{
+//			this.showHead();
+//			if(this.tbody.getElements('*').length > 0){
+//				if(this.tbody.getFirst().getElements('td').length == 1){
+//					this.tbody.getElements('tr > td').set('colspan',this.thead.getElements('tr > th').length);
+//				}
+//			}
+//		}
 	}
 }).extend({
 	contentClass:'cntnt-tb',
