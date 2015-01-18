@@ -551,7 +551,9 @@ margin-bottom: 0px	!important;
 	width: 76%	!important;
 	left: 10%	!important;
 }
-div.activo,div.inactivo,div.err {
+div.activo,
+div.inactivo,
+div.err {
 	text-align: center	!important;
 	width: 40px	!important;
 	border-radius: 5px;

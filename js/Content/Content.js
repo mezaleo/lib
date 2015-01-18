@@ -72,7 +72,7 @@ var Content = new Class({
 			this.options.contentElement = document.body;
 		}
 		if(Content.mnmiceContent == null){
-			Content.mnmiceContent = new Element('div.'+this.mnmiceContentClass).injectInside(this.options.contentElement);
+			Content.mnmiceContent = new Element('div.'+this.mnmiceContentClass);
 		}
 		
 		this.setOptions(opt);

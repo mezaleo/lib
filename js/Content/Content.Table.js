@@ -57,7 +57,7 @@ Content.Table = new Class({
 		draggable:false,
 		table:null,
 		deleteButton:false,
-		title:'Its a new table',
+		title:null,
 		mobileListTitle:'Lista de registros.',
 		limite:100,
 		check:false,
