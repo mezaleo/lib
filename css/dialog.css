@@ -60,6 +60,9 @@ filter:
 .dialog_content>input[type="submit"],
 .dialog_content>input[type="button"] {
 	float: right;
+	border:	1px solid #285e8e;
+	padding: 10px;
+	margin-right: 10px;
 }
 .mini-browser-dialog > input[type="submit"],
 .mini-browser-dialog > input[type="button"] {
@@ -68,17 +71,12 @@ filter:
 
 .btn_aceptar,input[value *="Aceptar"] {
 	background-color: #3276b1;
-	border-color: #285e8e;
-	color: white !important;
 	cursor: pointer !important;
-	border-color: #285e8e;
 }
 
 .mini-browser-dialog > .dialog_title > .dialog_close_button{
 	height:	30px	!important;
 	width:	30px	!important;
-/*	background-size: 1500px 290px;*/
-/*	background-position: -1391px -132px	!important;*/
 	background-position: -690px -60px;
 }
 

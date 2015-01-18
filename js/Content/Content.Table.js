@@ -220,9 +220,8 @@ Content.Table = new Class({
 			if(this.options.lastRowButton != null){
 				var th = new Element('th').injectInside(tr);
 			}
-//			var tr2 = tr.clone();
-//			tr2.injectInside(this.tableHead);
-			this.tableHead.adopt(tr);
+			
+//			this.tableHead.adopt(tr);
 			
 		}else{
 			this.showMessage(this.options.mobileListTitle);
@@ -307,26 +306,26 @@ Content.Table = new Class({
 						}
 					});
 				}
-				if(this.options.lastRowButton != null){
-					if(this.options.lastRowButton.addIf == null
-							|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
-		
-						var td = new Element('div').injectInside(tr);
-						var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
-							events:{
-								click:function(){
-									tabla.options.lastRowButton.onClick(props);
-								}
-							}
-						}).injectInside(td);
-						
-						if(this.options.lastRowButton.addClass != null){
-							bt.addClass(this.options.lastRowButton.addClass);
-						}
-					}else{
-						var td = new Element('td').injectInside(tr);
-					}
-				}
+//				if(this.options.lastRowButton != null){
+//					if(this.options.lastRowButton.addIf == null
+//							|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
+//		
+//						var td = new Element('div').injectInside(tr);
+//						var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+//							events:{
+//								click:function(){
+//									tabla.options.lastRowButton.onClick(props);
+//								}
+//							}
+//						}).injectInside(td);
+//						
+//						if(this.options.lastRowButton.addClass != null){
+//							bt.addClass(this.options.lastRowButton.addClass);
+//						}
+//					}else{
+//						var td = new Element('td').injectInside(tr);
+//					}
+//				}
 			}else{
 				if(this.options.onClick != null){
 					tr.addEvent('click',function(){
@@ -735,7 +734,6 @@ Content.Table = new Class({
 			this.refresh();
 		}
 		this.focus();
-		this.resizeHead();
 	},
 	downloadTable : function(){
 		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];
@@ -743,23 +741,8 @@ Content.Table = new Class({
 	hideComment:function(){
 		this.comentario.hide();
 	},
-	resizeHead : function(){
-		console.log('resizeHead');
-		var me = this;
-		if(this.tbody.getFirst() != null && this.tableHead.getFirst() != null){
-			this.tbody.getFirst().getChildren('td').each(function(td,k){
-				var w = td.getStyle('width');
-				me.tableHead.getFirst().getChildren('th:nth-child('+(k+1)+')').setStyle('width',w);
-			});
-		}else{
-			console.log(this.tbody.getFirst());
-			console.log(this.tableHead.getFirst());
-		}
-	},
 	onResize : function(){
 		this.parent();
-
-		this.resizeHead();
 		
 //		this.hideMessage();
 //		this.hideHead();
