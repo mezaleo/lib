@@ -272,7 +272,7 @@ Content.Table = new Class({
 			
 			if(this.options.onClick != null){
 				tr.addEvent('click',function(){
-					tabla.options.onClick(props);
+					tabla.options.onClick(props,tr);
 				});
 			}
 		}else{
@@ -302,34 +302,14 @@ Content.Table = new Class({
 				if(this.options.onClick != null){
 					tr.addEvent('click',function(){
 						if(!ck.hasClass('ckhover')){
-							tabla.options.onClick(props);
+							tabla.options.onClick(props,tr);
 						}
 					});
 				}
-//				if(this.options.lastRowButton != null){
-//					if(this.options.lastRowButton.addIf == null
-//							|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
-//		
-//						var td = new Element('div').injectInside(tr);
-//						var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
-//							events:{
-//								click:function(){
-//									tabla.options.lastRowButton.onClick(props);
-//								}
-//							}
-//						}).injectInside(td);
-//						
-//						if(this.options.lastRowButton.addClass != null){
-//							bt.addClass(this.options.lastRowButton.addClass);
-//						}
-//					}else{
-//						var td = new Element('td').injectInside(tr);
-//					}
-//				}
 			}else{
 				if(this.options.onClick != null){
 					tr.addEvent('click',function(){
-						tabla.options.onClick(props);
+						tabla.options.onClick(props,tr);
 					});
 				}
 			}
@@ -453,7 +433,7 @@ Content.Table = new Class({
 					var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
 						events:{
 							click:function(){
-								tabla.options.lastRowButton.onClick(props);
+								tabla.options.lastRowButton.onClick(props,tr);
 							}
 						}
 					}).injectInside(td);
