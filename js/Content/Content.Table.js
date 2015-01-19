@@ -464,7 +464,7 @@ Content.Table = new Class({
 		if(this.tmpDataSource[this.jsonOkField] == this.jsonOkValue){
 			this.tmpDataSource = this.tmpDataSource[this.options.dataSourceObjectsField];
 			if(this.tmpDataSource.length > 0){
-				this.setComment('Se ha encontrado '+this.tmpDataSource.length + ((this.tmpDataSource.length > 1)?' registros.':' registro.'));
+//				this.setComment('Se ha encontrado '+this.tmpDataSource.length + ((this.tmpDataSource.length > 1)?' registros.':' registro.'));
 				
 				var rows = new Array();
 				//var head = new Array();

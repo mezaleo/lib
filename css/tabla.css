@@ -33,6 +33,7 @@
 	padding: 10px 15px;
 	border-top-left-radius: 3px;
 	border-top-right-radius: 3px;
+	font-size: 13px;
 }
 .tabla>div.tcomentario {
 	background-repeat: repeat-x;
@@ -76,7 +77,7 @@
 /*	text-shadow: 0 -1px 0 #3071a9;*/
 	color: #232323;
 	background-color: #fff;
-	font-weight: normal;
+	font-weight: bold;
 	text-transform: capitalize;
 	border-bottom: 1px solid #ccc;
 	display:table-cell;
