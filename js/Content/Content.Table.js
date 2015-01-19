@@ -334,7 +334,26 @@ Content.Table = new Class({
 							if(add){
 								var inp = null;
 								if(c.editable.type == null || c.editable.type == 'date'){
-									inp = new Element('input[type="text"][disabled="true"][old-value="'+v+'"].tbletxt').injectInside(div);
+									inp = new Element('input[type="text"][readonly="true"][old-value="'+v+'"].tbletxt',{
+										events:{
+											click:function(){
+												this.set('readonly',false);
+												div.addClass('focus');
+												this.set('title','Press entero to go on');
+												this.select();
+											},
+											keyup:function(ev){
+												if(ev.key == 'enter'){
+													new Dialog('enter');
+												}
+											},
+											blur:function(ev){
+												this.set('readonly',true);
+												div.removeClass('focus');
+												this.set('title',null);
+											}
+										}
+									}).injectInside(div);
 								}else if(c.editable.type == 'combo'){
 									inp = new Combo({
 										values:{
@@ -346,56 +365,57 @@ Content.Table = new Class({
 									inp.injectInside(div);
 									div.set('nowrap','nowrap');
 								}
-								if(c.editable.width != null){
-									inp.setStyle('width',c.editable.width);
+								div.addClass('editable-td');
+								if(c.alias != null && c.alias.width != null){
+									div.setStyle('width',c.alias.width);
 								}
 								if(c.editable.maxLength != null){
 									inp.set('maxlength',c.editable.maxLength);
 								}
-								var btn = new Element('input[type="button"].toedit',{
-									events:{
-										click:function(){
-											if(this.hasClass('toedit')){
-												this.removeClass('toedit');
-												this.addClass('editing');
-												inp.set('disabled',false);
-												if(inp.get('tag') == 'input'){
-													inp.select();
-												}
-											}else {
-												if(c.editable.allowEmpty != null && c.editable.allowEmpty == false){
-													if(inp.get('value') == '' || inp.get('value') == null){
-														new Dialog('No se permiten valores vacios.');
-														return;
-													}
-												}
-											
-												this.addClass('toedit');
-												this.removeClass('editing');
-												inp.set('disabled',true);
-												inp.set('new-value',inp.get('value'));
-												var old = inp.get('old-value');
-												var nw = inp.get('new-value');
-												inp.set('old-value',nw);
-												
-												if(nw != old){
-													if(c.editable.handler != null){
-														if(c.editable.handler(old,nw,props) == true){
-															if(('onlyWhenEqualTo' in c.editable)){
-																div.empty();
-																div.set('html',nw);
-															}else{
-																inp.set('value',nw);
-															}
-														}else{
-															inp.set('value',v);
-														}
-													}
-												}
-											}
-										}
-									}
-								}).injectInside(div);
+//								var btn = new Element('input[type="button"].toedit',{
+//									events:{
+//										click:function(){
+//											if(this.hasClass('toedit')){
+//												this.removeClass('toedit');
+//												this.addClass('editing');
+//												inp.set('disabled',false);
+//												if(inp.get('tag') == 'input'){
+//													inp.select();
+//												}
+//											}else {
+//												if(c.editable.allowEmpty != null && c.editable.allowEmpty == false){
+//													if(inp.get('value') == '' || inp.get('value') == null){
+//														new Dialog('No se permiten valores vacios.');
+//														return;
+//													}
+//												}
+//											
+//												this.addClass('toedit');
+//												this.removeClass('editing');
+//												inp.set('disabled',true);
+//												inp.set('new-value',inp.get('value'));
+//												var old = inp.get('old-value');
+//												var nw = inp.get('new-value');
+//												inp.set('old-value',nw);
+//												
+//												if(nw != old){
+//													if(c.editable.handler != null){
+//														if(c.editable.handler(old,nw,props) == true){
+//															if(('onlyWhenEqualTo' in c.editable)){
+//																div.empty();
+//																div.set('html',nw);
+//															}else{
+//																inp.set('value',nw);
+//															}
+//														}else{
+//															inp.set('value',v);
+//														}
+//													}
+//												}
+//											}
+//										}
+//									}
+//								}).injectInside(div);
 								if(c.editable.type != null){
 									if(c.editable.type == 'date'){
 										new Picker.Date(inp, {
