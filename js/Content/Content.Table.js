@@ -218,11 +218,14 @@ Content.Table = new Class({
 				
 			});
 			if(this.options.lastRowButton != null){
-				var th = new Element('th').injectInside(tr);
+				if(this.options.lastRowButton instanceof Array){
+					this.options.lastRowButton.each(function(btn){
+						new Element('th').injectInside(tr);
+					});
+				}else{
+					new Element('th').injectInside(tr);
+				}
 			}
-			
-//			this.tableHead.adopt(tr);
-			
 		}else{
 			this.showMessage(this.options.mobileListTitle);
 		}
@@ -446,21 +449,40 @@ Content.Table = new Class({
 	            }
 			});
 			if(this.options.lastRowButton != null){
-				if(this.options.lastRowButton.addIf == null
-						|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
-	
-					var td = new Element('td').injectInside(tr);
-					var bt = new Element('button[type="button"][html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
-						events:{
-							click:function(){
-								tabla.options.lastRowButton.onClick(props,tr);
+				if(this.options.lastRowButton.length == undefined){
+					if(this.options.lastRowButton.addIf == null
+							|| props[this.options.lastRowButton.addIf.field] == this.options.lastRowButton.addIf.equalTo){
+		
+						var td = new Element('td').injectInside(tr);
+						var bt = new Element('div[html="'+ tabla.options.lastRowButton.text +'"].rowButton',{
+							events:{
+								click:function(){
+									tabla.options.lastRowButton.onClick(props,tr);
+								}
 							}
+						}).injectInside(td);
+						
+						if(this.options.lastRowButton.addClass != null){
+							bt.addClass(this.options.lastRowButton.addClass);
 						}
-					}).injectInside(td);
-					
-					if(this.options.lastRowButton.addClass != null){
-						bt.addClass(this.options.lastRowButton.addClass);
+					}else{
+						var td = new Element('td').injectInside(tr);
 					}
+				}else if(this.options.lastRowButton.length > 0){
+					this.options.lastRowButton.each(function(btn){
+						var td = new Element('td').injectInside(tr);
+						var bt = new Element('div[html="'+ btn.text +'"].rowButton',{
+							events:{
+								click:function(){
+									btn.onClick(props,tr);
+								}
+							}
+						}).injectInside(td);
+						
+						if(btn.addClass != null){
+							bt.addClass(btn.addClass);
+						}
+					});
 				}else{
 					var td = new Element('td').injectInside(tr);
 				}
