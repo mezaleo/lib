@@ -46,7 +46,6 @@ var Content = new Class({
 	options:{
 		contentElement:null,
 		buttonsOnTop:false,
-		open:true,
 		debug:false,
 		title:'<Sin Titulo>',
 		top:10,
@@ -224,9 +223,7 @@ var Content = new Class({
 		this.messageLabel = new Element('div.'+this.messageLabelClass).injectInside(this.content);
 		
 		this.hide();
-		if(this.options.open == true){
-			this.open();
-		}
+		
 
 		this.fields = new Element('form.'+this.fieldsClass).injectInside(this.content);
 		this.buttons = new Element('div.'+this.buttonsClass);
@@ -242,6 +239,10 @@ var Content = new Class({
 			console.log(this.content);
 			console.log('</Debugging>\n\n');
 		}
+		
+//		if(this.options.open == true){
+//			this.open();
+//		}
 	},
 	showComboValues : function(){
 		this.comboValuesContent.addClass('showing');

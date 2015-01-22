@@ -1,16 +1,15 @@
 var RequestAjax = new Class( {
 	Implements : Options,
-	initialize : function(url,object) {
+	initialize : function(url,object,cross) {
 		var obj = {
 			estado:500,
 			mensaje:'No se pudo realizar el Request a ' + url
 		};
 		try{
-			var request = new Request.JSON( {
+			var options = {
 				async : false,
 				url : url,
-				onRequest : function() {
-				},
+				data:object,
 				onSuccess : function(response) {
 					if(response != null && 
 						response instanceof Object == true &&
@@ -26,11 +25,18 @@ var RequestAjax = new Class( {
 						obj: xhr
 					}
 				}
-			}).post(object);
-			//request.setHeader('Last-Modified', 'Sat, 1 Jan 2005 05:00:00 GMT');		
+			};
+			var request = null;
+			if(cross != null){
+				console.log('jsonp');
+				request = new Request.JSONP(options).send();
+			}else{
+				console.log('json');
+				request = new Request.JSON(options).post();
+			}
+			
 			return obj;
 		}catch(ex){
-			console.log(ex);
 			obj.exception = ex;
 			return obj;
 		}

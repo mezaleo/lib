@@ -16,13 +16,10 @@ Content.Table = new Class({
 	tableIdPrefix:'id_',
 	previousText:'<',
 	nextText:'>',
-	jsonDeleteAction: 'delete',
 	jsonOkField: 'estado',
 	jsonOkValue: 1,
 	noElementChecked:'Debe seleccionar por lo menos un registro.',
 	jsonMessageField: 'mensaje',
-	deleteButtonText:'Eliminar',
-	deleteSuccessText:'Registros eliminados exitosamente!',
 	refreshButtonText:'Recargar',
 	refreshButtonClass:'refresh',
 	headerValues:null,
@@ -50,13 +47,11 @@ Content.Table = new Class({
 		tableHeading:'Table',
 		comment:null,
 		rowTitleField:null,
-		open:false,
 		basePath:'./',
 		searchable:true,
 		top:10,
 		draggable:false,
 		table:null,
-		deleteButton:false,
 		title:null,
 		mobileListTitle:'Lista de registros.',
 		limite:100,
@@ -141,39 +136,15 @@ Content.Table = new Class({
 			});
 		}
 		
-		if(this.options.deleteButton){
-			this.addTopPanelButton('delete',function(){
-				var selected = tabla.getChecked();
-				var selected_count = selected.length;
-				if(selected_count > 0){
-					new Dialog.Confirm('Seguro desea eliminar los registros seleccionados?',{
-						onOk:function(){
-							selected.each(function(s){
-								var obj = {};
-								var id = tabla.tableIdPrefix+tabla.options.table;
-								obj[tabla.options.jsonGetParameter]=tabla.jsonDeleteAction;
-								obj[id] = s[id];
-								new RequestAjax(tabla.options.jsonControllerPath + tabla.options.table + tabla.options.jsonControllerPageExtension,obj);
-							});
-							tabla.refresh();
-							new Dialog(tabla.deleteSuccessText);
-						}
-					});
-					
-				}else{
-					new Dialog(tabla.noElementChecked);
-				}
-				
-				
-			});
-		}
 		this.currentClass = 1;
 		this.showRows(this.pagClass + this.currentClass);
 		
 		
 	},
 	setComment : function(comentario) {
-		this.comentario.set('html',comentario).show();
+		if(this.comentario != null){
+			this.comentario.set('html',comentario).show();
+		}
 	},
 	hideHead : function(){
 		this.thead.hide();
@@ -203,6 +174,11 @@ Content.Table = new Class({
 					}
 				}).injectInside(th);
 			}
+			
+			if(this.options.expandable != null){
+				var th = new Element('th.expandable-th').injectInside(tr);
+			}
+			
 			if(this.options.radio){
 				var th = new Element('th').injectInside(tr);
 			}
@@ -316,6 +292,29 @@ Content.Table = new Class({
 					});
 				}
 			}
+			
+			if(this.options.expandable != null){
+				var t = new Element('td.expandable-td',{
+					events:{
+						click:function(){
+							if(tabla.options.expandable.onClick != null){
+								if(this.getParent().getNext() != null && this.getParent().getNext().hasClass('tmp-tr') == false){
+									$$('.tmp-tr').destroy();
+									
+									var tmptr = new Element('tr.tmp-tr').inject(tr,'after');
+									var tmptd = new Element('td[colspan="'+tr.getElements('td').length+'"]').injectInside(tmptr);
+									(function(){
+										tmptd.addClass('opn')
+									}).delay(50,this)	
+								}else{
+									console.info(this.getParent().getNext().hasClass('tmp-tr'));
+								}
+							}
+						}
+					}
+				}).injectInside(tr);
+			}
+			
 			//var count
 			arr.each(function(v){
 				var div = new Element('td').injectInside(tr);
@@ -323,7 +322,7 @@ Content.Table = new Class({
 	                v.injectInside(div);
 	            } else {
 	            	if(tabla.options.header != null){
-						var a = tr.getElements('td[class!="checkbox"]');
+						var a = tr.getElements('td[class!="checkbox"][class!="expandable-td"]');
 						var b = a.length - 1;
 						var c = tabla.options.header[b];
 						if(c != null && c.editable != null ){
@@ -347,7 +346,34 @@ Content.Table = new Class({
 											},
 											keyup:function(ev){
 												if(ev.key == 'enter'){
-													new Dialog('enter');
+													if(c.editable.allowEmpty != null && c.editable.allowEmpty == false){
+														if(inp.get('value') == '' || inp.get('value') == null){
+															new Dialog('No se permiten valores vacios.');
+															return;
+														}
+													}
+												
+													inp.set('readonly',true);
+													inp.set('new-value',inp.get('value'));
+													var old = inp.get('old-value');
+													var nw = inp.get('new-value');
+													
+													if(nw != old){
+														if(c.editable.handler != null){
+															if(c.editable.handler(old,nw,props) == true){
+																if(('onlyWhenEqualTo' in c.editable)){
+																	div.empty();
+																	div.set('html',nw);
+																}else{
+																	inp.set('value',nw);
+																	inp.set('old-value',nw);
+																}
+																div.removeClass('focus');
+															}else{
+																inp.set('value',v);
+															}
+														}
+													}
 												}
 											},
 											blur:function(ev){
@@ -378,44 +404,7 @@ Content.Table = new Class({
 //								var btn = new Element('input[type="button"].toedit',{
 //									events:{
 //										click:function(){
-//											if(this.hasClass('toedit')){
-//												this.removeClass('toedit');
-//												this.addClass('editing');
-//												inp.set('disabled',false);
-//												if(inp.get('tag') == 'input'){
-//													inp.select();
-//												}
-//											}else {
-//												if(c.editable.allowEmpty != null && c.editable.allowEmpty == false){
-//													if(inp.get('value') == '' || inp.get('value') == null){
-//														new Dialog('No se permiten valores vacios.');
-//														return;
-//													}
-//												}
 //											
-//												this.addClass('toedit');
-//												this.removeClass('editing');
-//												inp.set('disabled',true);
-//												inp.set('new-value',inp.get('value'));
-//												var old = inp.get('old-value');
-//												var nw = inp.get('new-value');
-//												inp.set('old-value',nw);
-//												
-//												if(nw != old){
-//													if(c.editable.handler != null){
-//														if(c.editable.handler(old,nw,props) == true){
-//															if(('onlyWhenEqualTo' in c.editable)){
-//																div.empty();
-//																div.set('html',nw);
-//															}else{
-//																inp.set('value',nw);
-//															}
-//														}else{
-//															inp.set('value',v);
-//														}
-//													}
-//												}
-//											}
 //										}
 //									}
 //								}).injectInside(div);
@@ -492,7 +481,7 @@ Content.Table = new Class({
 	},
 	fillHeader:function(){
 		var tabla = this;
-		if(this.headerValues.length == 0){
+		if(this.headerValues != null && this.headerValues.length == 0){
 			this.options.header.each(function(h){
 				tabla.headerValues.push(h.alias);
 			});
@@ -557,7 +546,7 @@ Content.Table = new Class({
 		}
 	},
 	buildPaginator: function(){
-		if(!this.paginatorDefined){
+		if(!this.paginatorDefined && this.thead != null){
 			this.paginatorDefined = true;
 			var tabla = this;
 			var cols = tabla.thead.getElements('tr');
@@ -657,7 +646,9 @@ Content.Table = new Class({
 		this.tabla.getElement('thead').empty();
 	},
 	resetBody : function(){
-		this.tabla.getElement('tbody').empty();
+		if(this.tabla != null && this.tabla.getElement('tbody')){
+			this.tabla.getElement('tbody').empty();
+		}
 	},
 	countAllByClass : function(c){
 		return this.getByClass(c).length; 
@@ -683,7 +674,8 @@ Content.Table = new Class({
 		this.tfoot.show();
 	},
 	hidePaginator: function(){
-		this.tfoot.hide();
+		if(this.tfoot != null)
+			this.tfoot.hide();
 	},
 	showNext: function(){
 		if(!this.paginatorDefined){
@@ -707,7 +699,10 @@ Content.Table = new Class({
 		if(!this.paginatorDefined){
 			this.buildPaginator();
 		}
-		this.tfootPrevious.setStyle('visibility','hidden');
+		if(this.tfootPrevious != null){
+			this.tfootPrevious.setStyle('visibility','hidden');
+		}
+		
 	},
 	setDataSource:function(arr){
 		if(arr != null && arr.length > 0){
@@ -755,7 +750,6 @@ Content.Table = new Class({
 		if(this.options.table != null){
 			this.refresh();
 		}
-		this.focus();
 	},
 	downloadTable : function(){
 		window.location = this.options.basePath + 'tmp/'+this.dataSource[this.options.downloadListProperty];

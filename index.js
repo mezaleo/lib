@@ -7,91 +7,79 @@ Element.implement({
 		this.focus();
 	}
 });
-
-var menu = new Menu( {
-	title : 'Titulo',
-	optionsLimit : 7
-});
-menu.setBlueStyle();
-menu.add('Opcion 1');
-menu.add('Opcion 2');
-menu.add('Opcion 3');
-menu.add('Opcion 3');
-menu.add('Opcion 3');
-menu.add('Opcion 3');
-
-var form1 = new Content.Form({
-	title:'Formulario de ingreso',
-	width: 30,
-	align:'left',
-	minimizable:true,
-	values:{
-		field01:'Name',
-		combo:'1'
-	}
-});
-
-form1.addTextLabel('Nombre','l01');
-form1.addField({
-	title:'Nombre',
-	name:'field01'
-});
-
-form1.addTextLabel('Items','l02');
-form1.addCombo({
-	name:'Combo',
-	title:'Combo',
-	values:	[
-	{id:'1',text:'Item 01'},
-	{id:'2',text:'Item 02'}],
-	indexName:'id',
-	valueName:'text'
-});
-form1.addTextLabel('Fecha','l03');
-form1.addField({
-	title:'Fecha',
-	type:'date',
-	name:'field03'
-});
-form1.addButton({closeOnClick:false,type:'success',name:'btnAceptar',value:'Aceptar',
-	onClick:function(values,event,frm){
-		var r = new RequestAjax('http://lbtvvosap03.cl.lan.com:9256/appdeferredWeb/deferral/admDeferral.do',{method:'validate-fullreg'});
-		new Dialog(r.mensaje);
-	}
-});
-
-
-var table1 = new Content.Table({
-	title:'Lista 001',
-	width: 37,
-	draggable:true,
-	check:true,
-	header:[
-		{
-			alias:'Campo1'
+var tb1 = new Content.Table({
+		title:'Administrar Trabajos Diferidos',
+		jsonGetParameter:'method',
+		jsonGetAction:'get',
+		crossDomain:true,
+		jsonControllerPath:'deferral/',
+		basePath:'../',
+		jsonControllerPageExtension:'.do',
+		dataSourceObjectsField:'rows',
+		table:'admDeferral',
+//		searchable:false,
+		width:40,
+		tableHeight:330,
+		tableHeading:'Lista de diferidos generados.',
+		comment:'La siguiente lista despliega los diferidos generados hasta la fecha.',
+		top: 24,
+		closeable:false,
+		addClassIf:{
+			field:'incompleto',
+			className:'warn',
+			equalTo:true
 		},
-		{
-			alias:'Editable'
+		expandable:{
+			onClick:function(content,obj){
+//				content.set('html',new Date());
+				console.log(content);
+			}
 		},
-		{
-			alias:'Select',
+		lastRowButton:[{
+			text:'Ver',
+			onClick:function(o){
+				//updateDW(o.dw_nmr_moc,o.dewo_hub);
+			}
+		},{
+			text:'Ver2',
+			onClick:function(o){
+				//updateDW(o.dw_nmr_moc,o.dewo_hub);
+			}
+		},{
+			text:'Ver',
+			onClick:function(o){
+				//updateDW(o.dw_nmr_moc,o.dewo_hub);
+			}
+		}],
+		header:[{
+			field:'dw_nmr_moc',
+			alias:'N MOC',
 			editable:{
-				onlyWhenEqualTo:1,
-				type:'combo',
-				handler:function(oldValue,newValue){
-					new Dialog("old:" + oldValue + " new:" + newValue);
+				handler:function(a,b,c){
+					console.info(a);
+					console.info(b);
+					console.info(c);
+					return true;
 				}
 			}
+		},{
+			field:'sd',
+			alias:'Date',
+			editable:{
+				type:'date',
+				handler:function(a,b,c){
+					console.info(a);
+					console.info(b);
+					console.info(c);
+					return true;
+				}
+			}
+		}],
+		filter:{
+			paginaActual:1
 		}
-	]
-});
-table1.addRow(['1','14-01-2015',1]);
-table1.addRow(['1',null,2]);
-table1.addRow(['1','14-01-2015',1]);
-table1.showAllRows();
-table1.show();
+	});
 
+	tb1.open();
 
 });
-
-//c.injectInside(document.body);

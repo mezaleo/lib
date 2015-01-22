@@ -213,6 +213,7 @@
 .tabla>div.table-content>table>tbody>tr>td.editable-td {
 	border:	1px dashed #5286D8	!important;
 	padding:0px	!important;
+	padding-top: 0px	!important;
 	cursor:	text	!important;
 }
 .tabla>div.table-content>table>tbody>tr>td.editable-td.focus,
@@ -256,6 +257,7 @@
 	border: 1px solid #357ebd;
 	border-radius: 3px;
 	font-weight: bold;
+	float: right	!important;
 }
 .tabla>div.table-content>table>tbody>tr>td>button.rowButton:hover {
 	background-color: #25709C;
@@ -276,17 +278,19 @@
 	background-color:	transparent	!important;
 	cursor:	text	!important;
 	color:#555555;
+	
+	-moz-box-sizing: content-box; /* or `border-box` */
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
 }
 .tabla>div.table-content>table>tbody>tr>td>input.tbletxt:focus,
 .tabla>div.table-content>table>tbody>tr>td>input.tbletxt,
 .tabla>div.table-content>table>tbody>tr>td>input[readonly].tbletxt {
 	border:	0px !important;
-	position:relative;
 	width: 100%	!important;
 	height:100%	!important;
-	padding:0px	!important;
+	padding:0px !important;
 	font-size: 13px	!important;
-	margin:0px	!important
 }
 .tabla>div.table-content>table>tbody>tr>td>input[readonly].tbletxt {
 	background-color:	transparent	!important;
@@ -361,4 +365,33 @@
 .fields.tabla {
 /*	border:	1px solid #ccc	!important;*/
 
+}
+.expandable-td {
+	
+	width: 40px;
+	background-image:	url(images/expand3.png);
+	background-size: 60% 60%;
+	background-repeat: no-repeat;
+	background-position: center;
+	cursor:	pointer	!important;
+	opacity: 0.7	!important;
+	padding: 0px	!important;
+	
+}
+.tmp-tr {
+	display:table-row	!important;
+	opacity: 1;
+}
+.tmp-tr>td {
+	padding:0px	!important;
+	border:0px solid #ccc	!important;
+	transition: .8s all ease	!important;
+	-webkit-transition: .8s all ease	!important;
+	height: 0px;
+}
+.tmp-tr>td.opn {
+	height: 100px;
+	border-left:1px	solid  #ccc !important;
+	border-right:1px solid #ccc	!important;
+	border-bottom:1px solid #ccc	!important;
 }
