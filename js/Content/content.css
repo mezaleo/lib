@@ -234,6 +234,9 @@ margin-bottom: 0px	!important;
 	margin-right: 2px;
 }
 
+.c-mini.content>.buttons>* {
+	width: 100%	!important;
+}
 .content>.buttons>*.success {
 	background-color: #428bca;
 	color: white;
@@ -714,4 +717,14 @@ form .validation-advice { /*   padding-bottom: 5px;*/
 /**/
 *[class*="datepicker"] {
 	z-index: 8010	!important;
+}
+/**/
+.linkbutton {
+	background-color:	transparent;
+	text-decoration: underline;
+	border: 0px	!important;
+	font-size: 14px	!important;
+	padding: 5px 0px	!important;
+	float:right;
+	margin-top: 10px;
 }

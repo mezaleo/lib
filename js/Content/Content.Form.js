@@ -249,6 +249,71 @@ Content.Form = new Class({
 		}
 		return el;
 	},
+	addLinkButton : function(props){
+		if(!this.existElement(props.name)){
+			if(props.skipValidation == null){
+				props.skipValidation = false;
+			}
+			if(props.closeOnClick == null){
+				props.closeOnClick = true;
+			}
+			var me = this;
+//			new Element('br').injectInside(this.buttons);;
+			var b = new Element(this.buttonTag + '[type="button"][html="' + props.value + '"][name="' + props.name.trim().toLowerCase()+'"].linkbutton',{
+				events:{
+					click:function(ev){
+						var myFormValidator = new Form.Validator.Inline(me.fields);
+						myFormValidator.add('validate-rut', {
+						    errorMsg: 'Rut invalido.',
+						    test: function(element){
+								element.set('value',ArreglaRUT(element.value));
+						        if (element.value.length > 0){
+						        	return checkRutField(element.value);
+						        }
+						    }
+						});
+						
+						myFormValidator.add('validate-maxValue', {
+						    test: function(element){
+								var valor_maximo = element.get('maxValue').toInt();
+								this.errorMsg = 'Valor maximo '+valor_maximo+'.';
+								//element.set('value',ArreglaRUT(element.value));
+						        if (element.value.toInt() > valor_maximo){
+						        	return false;
+						        }else{
+						        	return true;
+						        }
+						    }
+						});
+						if(props.skipValidation == false){
+							if (myFormValidator.validate()) {
+								me.showSpinner();
+								(function(a,b,c){
+									props.onClick(me.getFormValues(),ev,me);
+									a.hideSpinner();
+								}).delay((props.delay != null) ? props.delay:500, this, me);
+		
+								me.hideMessage();
+								if(props.closeOnClick){
+									me.close();
+								}
+							}else{
+								me.showErrorMessage(me.validationFailedMessage);	
+							}
+						}
+						
+						if(props.skipValidation == true){
+							if(props.closeOnClick){
+								me.close();
+							}
+							props.onClick(me.getFormValues(),ev,me);
+						}
+					}
+				}
+			}).injectInside(this.buttons);
+			this.elementArr.push({element:b});
+		}
+	},
 	addButton : function(props){
 		if(!this.existElement(props.name)){
 			if(props.skipValidation == null){
@@ -313,8 +378,6 @@ Content.Form = new Class({
 				}
 			}).injectInside(this.buttons);
 			this.elementArr.push({element:b});
-		}else{
-			console.log(this.addFieldExistError);
 		}
 	},
 	setComboValues : function(props,el){
