@@ -298,16 +298,17 @@ Content.Table = new Class({
 					events:{
 						click:function(){
 							if(tabla.options.expandable.onClick != null){
-								if(this.getParent().getNext() != null && this.getParent().getNext().hasClass('tmp-tr') == false){
+								if(this.getParent().getNext() == null || this.getParent().getNext().hasClass('tmp-tr') == false){
 									$$('.tmp-tr').destroy();
 									
 									var tmptr = new Element('tr.tmp-tr').inject(tr,'after');
 									var tmptd = new Element('td[colspan="'+tr.getElements('td').length+'"]').injectInside(tmptr);
 									(function(){
 										tmptd.addClass('opn')
-									}).delay(50,this)	
-								}else{
-									console.info(this.getParent().getNext().hasClass('tmp-tr'));
+									}).delay(50,this);
+									(function(){
+										tabla.options.expandable.onClick(props,tmptd);
+									}).delay(500,this);
 								}
 							}
 						}

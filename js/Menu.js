@@ -129,10 +129,6 @@ var Menu = new Class( {
 		
 	},
 	setTitle:function(text){
-		console.log(text);
-//		if(text.length > this.titleMaxLength){
-//			text = text.substring(0,this.titleMaxLength);
-//		}
 		this.title.set('html',text);
 	},
 	add:function(text,props){
@@ -141,9 +137,6 @@ var Menu = new Class( {
 			html : text,
 			events : {
 				click : function(){
-//                    if(props.closeAll == null || props.closeAll == true){
-//                        Page.closeAll();
-//                    }
 					
 					if(props != null){
 						if(props.page != null){

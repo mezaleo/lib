@@ -24,7 +24,6 @@ var Content = new Class({
 	messageLabelClass:'message-label',
 	messageLabelErrorClass:'error-message',
 	tabContentClass:'tab-content',
-	comboValuesContentClass:'combo-values-content',
 	draggableClass:'draggable',
 	draggingClass:'dragging',
 	focusClass:'focus',
@@ -95,28 +94,15 @@ var Content = new Class({
 			me.onResize();
 		});
 		
-		
-		this.comboValuesContent = new Element('div.'+this.comboValuesContentClass).injectInside(this.content);
-		new Element('div[html="Seleccione un elemento"]').injectInside(this.comboValuesContent);
-		this.comboValues = new Element('div').injectInside(this.comboValuesContent);
-		new Element('div[html="Volver"]',{
-			events:{
-				click:function(){
-					me.hideComboValues();
-				}
-			}
-		}).injectInside(this.comboValuesContent);
-		
-		// this.spinner = new Spinner(this.content);
-		// this.spinner.hide();
-		
 		//setting width and align
 		this.content.setStyle('width',this.options.width+'%');
-		if(this.options.height == 'auto'){
-			this.content.setStyle('height',this.options.height);	
-		}else{
-			this.content.setStyle('height',this.options.height+'%');
-		}
+		
+//		if(this.options.height == 'auto'){
+//			this.content.setStyle('height',this.options.height);	
+//		}else{
+//			this.content.setStyle('height',this.options.height+'%');
+//		}
+		
 		if(this.options.align == 'center'){
 			this.content.setStyle('left',((100 - this.options.width)/2)+'%');
 		}else if(this.options.align == 'right'){
@@ -239,18 +225,6 @@ var Content = new Class({
 			console.log(this.content);
 			console.log('</Debugging>\n\n');
 		}
-		
-//		if(this.options.open == true){
-//			this.open();
-//		}
-	},
-	showComboValues : function(){
-		this.comboValuesContent.addClass('showing');
-		this.hideBody();
-	},
-	hideComboValues : function(){
-		this.comboValuesContent.removeClass('showing');
-		this.showBody();
 	},
 	showMessage : function(message){
 		this.messageLabel.set('html',message).show();

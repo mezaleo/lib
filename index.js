@@ -32,7 +32,6 @@ var tb1 = new Content.Table({
 		expandable:{
 			onClick:function(content,obj){
 //				content.set('html',new Date());
-				console.log(content);
 			}
 		},
 		lastRowButton:[{
