@@ -3,18 +3,15 @@
 	padding-left: 2%	!important;
 	padding-right: 2%	!important;
 	border:	0px	!important;
-	left:	0px	!important;
+	left:	0%	!important;
 }
 .c-mini > .tabla {
 	overflow-x: hidden	!important;
-	margin-top: 0px	!important;
+/*	margin-top: 0px	!important;*/
 }
 .cntnt-tb.c-mini > div.message-label{
 	margin-bottom: 0px;
-/*	background-image: -webkit-linear-gradient(top, #428bca 0, #3278b3 100%);*/
-/*	background-image: linear-gradient(to bottom, #428bca 0, #3278b3 100%);*/
 	background-color: #ffffff;
-/*	background-repeat: repeat-x;*/
 	display:none;
 	color: #232323;
 	border: 1px solid #f1f1f1;
@@ -53,6 +50,7 @@
 	background-color:  #fafafa;
 	width:	100%	!important;
 	border: 1px solid #f3f3f3;
+	margin-top:10px	!important;
 }
 .tabla>div.table-content>table {
 	width:100%;
@@ -72,9 +70,8 @@
 }
 .tabla>div.table-content>table>thead>tr>th,
 .tabla>div.table-head>tr>th { 
-	padding: 10px;
+	padding: 5px 7px;
 	text-align: left;
-/*	text-shadow: 0 -1px 0 #3071a9;*/
 	color: #232323;
 	background-color: #fff;
 	font-weight: bold;
@@ -89,9 +86,9 @@
 	text-align:	right;
 	border-right: 1px solid #ccc;
 }
-.tabla>div.table-content>table>thead>tr>th:last-child >* {
-	float:	right;
-}
+/*.tabla>div.table-content>table>thead>tr>th:last-child >* {*/
+/*	float:	right;*/
+/*}*/
 .tabla>div.table-content>table>tbody>tr{
 	display:none;
 }
@@ -232,9 +229,9 @@
 	text-align: right;
 	border-right: 1px solid #ccc;
 }
-.tabla>div.table-content>table>tbody>tr>td:last-child >* {
-	float:	right	!important;
-}
+/*.tabla>div.table-content>table>tbody>tr>td:last-child >* {*/
+/*	float:	right	!important;*/
+/*}*/
 .tabla>div.table-content>table>tbody>tr:hover>td {
 	background-color: #f3f3f3;
 }
@@ -246,7 +243,7 @@
 .tabla>div.table-content>table>tbody>tr:hover>td:last-child {
 	border-right: 1px solid #c6d8e4;
 }
-.tabla>div.table-content>table>tbody>tr>td>div.rowButton {
+.tabla>div.table-content>table>tbody>tr>td>*.rowButton {
 	font-family: 'Arial';
 	padding: 5px 7px;
 	font-size: 12px;
@@ -257,7 +254,8 @@
 	border: 1px solid #357ebd;
 	border-radius: 3px;
 	font-weight: bold;
-	float: right	!important;
+	width: auto	!important;
+/*	float: right	!important;*/
 }
 .tabla>div.table-content>table>tbody>tr>td>button.rowButton:hover {
 	background-color: #25709C;
@@ -366,17 +364,24 @@
 /*	border:	1px solid #ccc	!important;*/
 
 }
-.expandable-td {
-	
-	width: 40px;
-	background-image:	url(images/expand3.png);
-	background-size: 60% 60%;
+.expandable-th{
+	width: 30px	!important;
+	padding: 0px	!important;
+}
+.expandable-td{
+	padding: 0px	!important;
+	text-align: center;
+}
+.expandable-td>div {
+	width: 30px;
+	height: 30px;
+	background-image:	url(images/expand4.png);
+	background-color:	transparent;
 	background-repeat: no-repeat;
 	background-position: center;
 	cursor:	pointer	!important;
 	opacity: 0.7	!important;
-	padding: 0px	!important;
-	
+	margin: 4px 0px -10px 2px;
 }
 .tmp-tr {
 	display:table-row	!important;
@@ -384,13 +389,54 @@
 }
 .tmp-tr>td {
 	padding:0px	!important;
-	transition: .8s all ease	!important;
-	-webkit-transition: .8s all ease	!important;
+	transition: .3s all ease	!important;
+	-webkit-transition: .3s all ease	!important;
 	height: 0px;
 	text-align: left	!important;
 	padding: 10px	!important;
 	overflow-y: auto;
 }
 .tmp-tr>td.opn {
-	height: 100px;
+	height: 40px;
+}
+.row-img {
+	border:	1px solid #fafafa;
+	width: 40px;
+	height: 40px;
+	margin-bottom: -15px;
+	background-size: 100%	100%;
+}
+.circulo-1,
+.circulo-2 {
+	border-radius: 50%	!important;
+	padding: 5px 2px;
+	font-weight:	bold;
+	text-align:center;
+/*	margin:	0	auto;*/
+	width: 26px;
+	height: 18px;
+	font-size:14px;
+	border:	1px solid #ccc;
+	color:	white;
+}
+.circulo-1 {
+	background-color:	#72C659;
+}
+.circulo-2 {
+	background-color:	#C65959;
+}
+tr.b-head > td{
+	background-color: #f5f5f5	!important;
+}
+td > *.row-boolean {
+	width: 20px;
+	height: 20px;
+	border:	0px solid;
+	background-color:	transparent;
+}
+td > *.row-boolean.row-true {
+	background-image: url(images/true.png);
+}
+td > *.row-boolean.row-false {
+	background-image: url(images/false.png);
 }

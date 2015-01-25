@@ -10,6 +10,7 @@ var Menu = new Class( {
 	},
 	options: {
 		title:'Nombre Proyecto',
+		onClick:null,
 		logo:'none',
 		optionsLimit:3,
 		minWidth:900
@@ -137,23 +138,18 @@ var Menu = new Class( {
 			html : text,
 			events : {
 				click : function(){
-					
-					if(props != null){
-						if(props.page != null){
-							var page = props.page;
-							page.open();
-							window.location='#'+text;
-						}else{
-							props.onClick();					
-						}	
+					if(menu.options.onClick != null){
+						menu.options.onClick();
 					}
-					
+					if(props.onClick != null){
+						props.onClick();					
+					}
 					menu.sub_cfg.removeClass('menu-sub-open');
 					menu.sub_cfg.set('open','false');
 				}
 			}
 		});
-
+		
 		if(props != null){
 			if(props.href != null){op.set('href',props.href);}
 			if(props.tel != null){op.set('tel',props.tel);}
@@ -161,16 +157,23 @@ var Menu = new Class( {
 		
 		if(this.currentOptions >= this.options.optionsLimit || window.getWidth() <= this.options.minWidth || isPhoneBrowser()){
 			this.makeMoreButton();
+			op.injectInside(this.sub_cfg);
+
 			if(this.currentOptions >= this.options.optionsLimit){
-				op.injectInside(this.sub_cfg);
 				op.addClass('sub-menu-item');
 			}else{
-				op.injectInside(this.sub_cfg);
 				op.addClass('menu-item');
 			}
 		}else{
 			op.injectInside(this.content);
 			op.addClass('menu-item');
+		}
+		var icn = new Element('div.menu-icon').inject(op,'top');
+		if(props!= null && props.image != null){
+			icn.setStyle('background-image','url('+props.image+')');
+		}
+		if(props!= null && props.sup != null){
+			new Element('sup[html="'+props.sup+'"]').injectInside(op);
 		}
 		
 		this.currentOptions++;

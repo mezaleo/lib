@@ -291,7 +291,7 @@ Content.Form = new Class({
 								(function(a,b,c){
 									props.onClick(me.getFormValues(),ev,me);
 									a.hideSpinner();
-								}).delay((props.delay != null) ? props.delay:500, this, me);
+								}).delay((props.delay != null) ? props.delay:300, this, me);
 		
 								me.hideMessage();
 								if(props.closeOnClick){

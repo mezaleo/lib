@@ -11,7 +11,6 @@ var Content = new Class({
 	spinner:null,
 	mimicClass:'mimic',
 	contentClass:'content',
-	openedClass:'opened',
 	hiddenClass:'hidden',
 	closeBarClass:'close-bar-class',
 	closeBtnClass:'btn_close',
@@ -39,6 +38,7 @@ var Content = new Class({
 	topPanelButtonContentClass:'top-panel-btn-content',
 	topPanelBodyClass:'top-panel-body',
 	minimalBorderDistance:20,//px
+	openClass:'c-open',
 	/*new properties for resize*/
 	mobileClass:'c-mini',
 	colorsArr:['#375BBD','#D3417C','#D34152','#41A3D3','#6BD341','#F3E629','#F37029','#F32929'],
@@ -72,6 +72,9 @@ var Content = new Class({
 		if(Content.mnmiceContent == null){
 			Content.mnmiceContent = new Element('div.'+this.mnmiceContentClass);
 		}
+		if(Content.contentsArr == null){
+			Content.contentsArr = new Array();
+		}
 		
 		this.setOptions(opt);
 		this.content = new Element('div.'+this.contentClass).injectInside(this.options.contentElement).setStyle('top',me.options.top+'%');
@@ -97,11 +100,11 @@ var Content = new Class({
 		//setting width and align
 		this.content.setStyle('width',this.options.width+'%');
 		
-//		if(this.options.height == 'auto'){
+		if(this.options.height == 'auto'){
 //			this.content.setStyle('height',this.options.height);	
-//		}else{
-//			this.content.setStyle('height',this.options.height+'%');
-//		}
+		}else{
+			this.content.setStyle('height',this.options.height+'%');
+		}
 		
 		if(this.options.align == 'center'){
 			this.content.setStyle('left',((100 - this.options.width)/2)+'%');
@@ -160,14 +163,22 @@ var Content = new Class({
 									if(me.options.onClose != null){
 										me.options.onClose();
 									}
-									me.close();
+//									me.close();
+									me.fadeOut();
+									(function(){
+										me.close();
+									}).delay(200,this);
 								}
 							});
 						}else{
 							if(me.options.onClose != null){
 								me.options.onClose();
 							}
-							me.close();
+//							me.close();
+							me.fadeOut();
+							(function(){
+								me.close();
+							}).delay(200,this);
 						}
 					}
 				}
@@ -208,8 +219,7 @@ var Content = new Class({
 		this.topPanelButtonContent = new Element('div.'+this.topPanelButtonContentClass).injectInside(this.topPanel);
 		this.messageLabel = new Element('div.'+this.messageLabelClass).injectInside(this.content);
 		
-		this.hide();
-		
+		this.content.hide();
 
 		this.fields = new Element('form.'+this.fieldsClass).injectInside(this.content);
 		this.buttons = new Element('div.'+this.buttonsClass);
@@ -225,6 +235,7 @@ var Content = new Class({
 			console.log(this.content);
 			console.log('</Debugging>\n\n');
 		}
+		Content.contentsArr.push(this);
 	},
 	showMessage : function(message){
 		this.messageLabel.set('html',message).show();
@@ -285,31 +296,34 @@ var Content = new Class({
 		// this.spinner.hide();
 	},
 	open: function(){
+		var me = this;
 		if(this.isMinimiced()){
 			this.maximice();
 		}else{
 			this.content.show();
 		}
 		this.focus();
-	},
-	show:function(){
-		this.open();
+		(function(){
+			me.content.addClass(this.openClass);
+		}).delay(100,this);
 		return this;
 	},
-	hide: function(){
-//		this.content.removeClass(this.openedClass);
-//		this.content.addClass(this.hiddenClass);
-		this.content.hide();
+	fadeOut:function(){
+		this.content.removeClass(this.openClass);
 	},
 	close: function(){
-		if(this.options.destroyable){
-			this.content.destroy();	
+		var me = this;
+		this.content.removeClass(this.openClass);
+		
+		if(me.options.destroyable){
+			me.content.destroy();	
 		}else{
-			this.hide();
+			me.content.hide();
 		}
 	},
 	addTopPanelButton:function(type,fn){
 		this.topPanel.show();
+		var me = this;
 		var b;
 		if(type == 'add' || type == 'reload' || type == 'delete'){
 			var title = null;
@@ -325,7 +339,9 @@ var Content = new Class({
 				b.set('html','+');
 			}
 		}else{
-			b = new Element('button.panel-btn[html="'+type+'"]').injectInside(this.topPanelButtonContent).addEvent('click',fn);
+			b = new Element('button.panel-btn[html="'+type+'"]').injectInside(this.topPanelButtonContent).addEvent('click',function(){
+				fn(me);
+			});
 		}
 		return b;
 	},
@@ -341,11 +357,11 @@ var Content = new Class({
 		}).delay(500, this);
 	},
 	isMobile : function(){
-//		if(this.content.hasClass(this.mobileClass)){
-//			return true;
-//		}else{
+		if(this.content.hasClass(this.mobileClass)){
+			return true;
+		}else{
 			return false;
-//		}
+		}
 	},
 	isMinimiced : function(){
 		return this.content.hasClass(this.mnmicedClass);
@@ -360,7 +376,11 @@ var Content = new Class({
 	}
 }).extend({
 	mnmiceContent : null,
-	closeAll:function(){
-		$$('.content').hide();
+	contentsArr: null,
+	fadeOutAll:function(){
+		Content.contentsArr.each(function(c){
+			c.fadeOut();
+		});
+	
 	}
 });
